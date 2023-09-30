@@ -1,0 +1,228 @@
+﻿@using DealCart.DAL.Models
+@inject IHttpContextAccessor _con;
+@{
+    int row = 0;
+    int totalQty = 0;
+    float totalBill = 0;
+    float subtotal = 0;
+    float totalVAT = 0;
+    string amount = string.Empty;
+    Layout = "_Layout";
+
+}
+<style>
+    body {
+        background: white !important;
+    }
+
+    .gallery-wrap .img-big-wrap {
+        margin-bottom: 10px;
+        border-radius: 0.37rem;
+        overflow: hidden;
+        background-color: #fff;
+    }
+
+        .gallery-wrap .img-big-wrap img {
+            height: auto;
+            width: 100%;
+            display: inline-block;
+            cursor: -webkit-zoom-in;
+            cursor: zoom-in;
+        }
+
+    .img-sm {
+        width: 80px;
+        height: 80px;
+    }
+    .gallery-wrap .thumbs-wrap {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .gallery-wrap .thumbs-wrap {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    article:after, .form-group:after {
+        display: block;
+        clear: both;
+        content: "";
+    }
+
+    .fake-input img {
+        position: absolute;
+        top: 25px;
+        left: 4px;
+    }
+
+    .fake-input .form-control {
+        padding-left: 65px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + 0.9rem + 2px);
+        padding: 0.45rem 0.85rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.37rem;
+        -webkit-transition: border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+        transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+    }
+
+    .fake-input span.code {
+        position: absolute;
+        top: 25px;
+        left: 29px;
+        font-size: 14px;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .label-rating {
+        margin-left: 7px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .price {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .price-old {
+        color: #969696;
+        margin-left: 5px;
+    }
+
+    .fake-input {
+        position: relative;
+    }
+</style>
+
+<div class="bg-gray bg-gray-200 mt-8 pb-8 px-5 pt-10">
+    <div>
+        <span class="text-dark fs-4 fw-bold">Home</span><span class="text-dark fs-5 fw-bold">/Order Booked</span>
+    </div>
+</div>
+<div class="container-fluid mb-8">
+<section class="section-content padding-y">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-9">
+                <div class="card">
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                            <th scope="col">Product</th> 
+                            <th scope="col" width="120">Quantity</th> 
+                            <th scope="col" width="120">Price</th> 
+                            <th scope="col" width="200" class="text-right">Remove</th>
+                        </tr></thead>
+                        <tbody>
+                       @if (@_con.HttpContext.Session.GetString("Cart") != null)
+                            {
+                                @foreach (var item in Newtonsoft.Json.JsonConvert.DeserializeObject<List<CartVM>>(@_con.HttpContext.Session.GetString("Cart")))
+                                {
+                                    <tr>
+                                        <td><figure class="itemside"><div class="aside"><img src="@item.ImageUrl" class="img-sm"></div>
+                                                <figcaption class="info"><a href="#" class="title text-dark">@item.Description</a> <p class="text-muted small">@item.Name</p></figcaption></figure></td>
+                                        <td>
+                                            @item.QuantityPrice
+                                        </td>
+                                        <td><div class="price-wrap"><var class="price">@item.SalePrice AED</var></div></td>
+                                        <td>
+                                            <a asp-action="RemoveFromBag" asp-controller="Order" asp-route-rowNo="@row" 
+                                       class="reduced items-count"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    row++;
+                                    totalQty += item.Quantity;
+                                   subtotal += float.Parse(item.SalePrice.ToString());
+                                    totalVAT += float.Parse(item.VAT.ToString());
+                                    totalBill += float.Parse((subtotal.ToString() + totalVAT.ToString())); ;
+
+
+                                }
+                                _con.HttpContext.Session.SetString("TotalAmount", Newtonsoft.Json.JsonConvert.SerializeObject(totalBill));
+
+                            }
+                        </tbody>
+                    </table> 
+                    <div class="card-body border-top">
+                         
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-success float-md-right"> Close Order</a>
+                              
+                                               
+                                      </div>
+                </div> <div class="alert alert-success mt-3"><p class="icontext"><i class="icon text-success fa fa-truck"></i> Delivery within 2 working days</p></div>
+
+            </main>
+            <aside class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                    <dl class="dlist-align"><dt>Sub Total:</dt> 
+                        <dd class="text-right">@subtotal AED</dd></dl>
+                        <dl class="dlist-align"><dt>Shipping Fee:</dt> 
+                            <dd class="text-right">0 AED</dd></dl>
+                            <dl class="dlist-align"><dt>VAT:</dt>
+                         <dd class="text-right">@totalVAT AED</dd></dl> <hr> 
+                         <dl class="dlist-align"><dt>Grand Total:</dt> 
+                             <dd class="text-right h5"><strong>@totalBill AED</strong></dd></dl>
+               
+                
+                        @if (@_con.HttpContext.Session.GetString("Order") != null)
+                        {
+                            foreach (var order in Newtonsoft.Json.JsonConvert.DeserializeObject<List<OrderVM>>(@_con.HttpContext.Session.GetString("Order")))
+                            {
+                                   
+                                <dl class="dlist-align">
+                                    <dt>Name:</dt>
+                                    <dd class="text-right">@order.OrderName</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                    <dt>Email:</dt>
+                                    <dd class="text-right">@order.OrderEmail</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                    <dt>Contact:</dt>
+                                    <dd class="text-right">@order.OrderContact</dd>
+                                </dl> 
+                                <dl class="dlist-align">
+                                    <dt>Address</dt>
+                                    <dd class="text-right h5">@order.OrderAddress @order.Emirates</dd>
+                                </dl>
+                           
+                            }
+                          
+                        }
+
+
+
+
+                        </div>
+                    </div>
+                         </aside>
+        </div>
+    </div>
+</section>
+    
+</div>
+<script type="text/javascript">
+    window.onload = function () { window.scrollBy(0, 180); }
+</script>
+
+    <!--================End Cart Area =================-->

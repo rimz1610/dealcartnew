@@ -1,0 +1,99 @@
+@model Dashboard
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class="">
+    <div class="card card-custom gutter-b">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">Dashboard</h3>
+            </div>
+            <div class="card-toolbar">
+             
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="container-fluid px-0">
+               
+                <div class="row justify-content-center">
+                    <div class="col-lg-3 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Total Products</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash">
+                                        <canvas width="67" height="30"
+                                                style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ms-auto"><span class="counter text-success">@Model.TotalProducts</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Total Orders</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash2">
+                                        <canvas width="67" height="30"
+                                                style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ms-auto"><span class="counter text-purple">@Model.TotalOrders</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Total Revenue</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash3">
+                                        <canvas width="67" height="30"
+                                                style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ms-auto">
+                                    <span class="counter text-info">@Model.TotalRevenue</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-12">
+                    <div class="white-box analytics-info">
+                        <h3 class="box-title">Total Sale Items</h3>
+                        <ul class="list-inline two-part d-flex align-items-center mb-0">
+                            <li>
+                                <div id="sparklinedash3">
+                                    <canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                </div>
+                            </li>
+                            <li class="ms-auto">
+                                <span class="counter text-info">@Model.TotalSaleProducts</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+             
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

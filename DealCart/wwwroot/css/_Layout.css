@@ -1,0 +1,232 @@
+﻿body {
+}
+
+.EdwardianScriptITC {
+    font-family: EdwardianScriptITC !important;
+    color: #989898;
+}
+
+.dropdown.on ul {
+    display: block !important;
+}
+
+.dropdown ul {
+    display: none !important;
+}
+
+.logoWH {
+    width: 120px;
+    height: 90px;
+    position: relative;
+    top: -23px;
+}
+
+.logoWHbottom {
+    width: 200px;
+    height: 140px;
+    position: relative;
+    top: -23px;
+}
+
+
+@media only screen and (max-width: 951px) {
+    .ulockd-main-logo > img, .ulockd-main-logo2 > img {
+        margin-top: 25px;
+        width: 70px !important;
+        height: 60px !important;
+    }
+}
+
+@media only screen and (min-width:951px) and (max-width:991px) {
+    .ulockd-main-logo > img, .ulockd-main-logo2 > img {
+        margin-top: 22px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+@media only screen and (max-width: 769px) {
+    .ulockd-main-logo > img, .ulockd-main-logo2 > img {
+        margin-top: 22px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+@media only screen and (max-width: 451px) {
+    .ulockd-main-logo > img, .ulockd-main-logo2 > img {
+        margin-top: 44px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .ulockd-main-logo > img, .ulockd-main-logo2 > img {
+        margin-top: 44px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+body {
+}
+
+.control {
+    white-space: nowrap;
+    width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bg-image-first-divider {
+    background-image: url("/FrontendAssets/images/background/Background.jpg")
+}
+
+.customheightimg {
+    max-height: 620px;
+    object-fit: cover;
+    object-position: bottom;
+}
+
+.EdwardianScriptITC {
+    font-family: EdwardianScriptITC !important;
+}
+
+.Palatino {
+    font-family: Palatino !important;
+}
+
+.Lucida {
+    font-family: Lucida !important;
+    font-size: xx-large !important;
+}
+
+
+
+
+.Ourevent {
+    color: #989898 !important;
+}
+
+.border {
+    color: #db6060 !important;
+    text-shadow: -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff;
+}
+
+.fontsizechange {
+    font-size: x-large !important;
+}
+
+.fontsizechange1 {
+    font-size: 27px !important;
+}
+
+.fontsizechange2 {
+    font-size: 40px !important;
+}
+
+.aligncenter {
+    text-align: center;
+}
+
+.adjustrowhere {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.position-relative {
+    position: relative !important;
+}
+
+.navigatorPhotostack {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 20px;
+}
+
+.photostack-img {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.photostack figure {
+    padding: 11px !important;
+}
+
+.color, .color:hover {
+    color: white;
+}
+
+
+.logoWHIndex {
+    width: 220px !important;
+    height: 160px !important;
+    margin: auto;
+    position: relative;
+    z-index: 100 !important;
+    top: -200px !important;
+}
+
+.NZimgWH {
+    width: 600px !important;
+    height: 120px !important;
+    margin: auto;
+}
+
+
+@media only screen and (max-width:769px) {
+    img.resizologo.logoWHIndex.logo.logo-display.hidden-md {
+        top: -41px !important;
+        margin: auto;
+    }
+
+    .NZimgWH {
+        height: 110px !important;
+    }
+}
+
+@media only screen and (max-width:450px) {
+
+    img.resizologo.logoWHIndex.logo.logo-display.hidden-md {
+        height: 160px !important;
+        width: 183px !important;
+        margin: auto;
+    }
+
+    .carousel-inner .NZimgWH.NZImage {
+        width: 270px !important;
+        height: 41px !important;
+    }
+}
+
+@media only screen and (max-width:376px) {
+    img.resizologo.logoWHIndex.logo.logo-display.hidden-md {
+        margin: auto;
+    }
+}
+
+@media only screen and (max-width:321px) {
+    img.resizologo.logoWHIndex.logo.logo-display.hidden-md {
+        margin: auto;
+    }
+}
+.TitleBottomimgStyling {
+    background: url("https://res.cloudinary.com/blossfest/image/upload/v1652678534/Bloss%20Fest/Home/title-bottom_cq6vub.webp");
+    height: 30px;
+    background-size: auto;
+    background-position-x: center;
+    background-repeat: no-repeat;
+}

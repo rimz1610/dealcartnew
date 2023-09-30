@@ -1,0 +1,717 @@
+﻿@model List<OrderViewModel>
+@{
+    ViewData["Title"] = "Order List";
+    var Flag = @ViewBag.Full;
+    Layout = "~/Views/Shared/_Admin.cshtml";
+
+}
+<style>
+    input[type=checkbox] {
+        /* Double-sized Checkboxes */
+        -ms-transform: scale(1) !important; /* IE */
+        -moz-transform: scale(1); /* FF */
+        -webkit-transform: scale(1) !important; /* Safari and Chrome */
+        -o-transform: scale(1) !important; /* Opera */
+        transform: scale(1) !important;
+        padding: 10px !important;
+    }
+
+    .labelclass {
+        font-size: 13px !important;
+    }
+
+    .border-right-none {
+        border-right: 1px solid #fff !important;
+    }
+
+    .checkbox input[type="checkbox"]:disabled + span {
+        background-color: #f3f6f9 !important;
+        border: 1px solid transparent;
+    }
+
+    .input-group-text {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: transparent;
+    }
+
+    @@media only screen and (max-width:991px) {
+        .w-lg-300px {
+            width: 300px !important;
+            min-width: 300px !important;
+        }
+    }
+
+    @@media (min-width: 1200px) {
+        .modal-dialog.modal-xl.festival-modal {
+            max-width: 1200px;
+        }
+    }
+</style>
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">Order List</h3>
+        </div>
+        <div class="card-toolbar">
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="exampleSelect1">Payment Method</label>
+                    <select class="form-control" id="SearchPaymentMethod">
+                        <option value="">All</option>
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                        <option value="Cash by PayPal">PayPal</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="exampleSelect1">Payment Status</label>
+                    <select class="form-control" id="SearchPaymentStatus">
+                        <option value="">All</option>
+                        <option value="Paid">Paid</option>
+                        <option value="UnPaid">UnPaid</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div style="display : inline-flex; margin-top:29px">
+                        <button type="button" id="SearchBookingBtn" class="btn btn-primary "><i class="la la-eye"></i>View</button>
+                      
+                        </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="tourTableDiv">
+        
+            <partial name="_BookingList" />
+        </div>
+    </div>
+</div>
+@*//Booking Edit Modal Begin*@
+<div class="modal fade" id="BookingEditModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center justify-content-between">
+                <div> <h5 class="modal-title" id="BookingEditModalLabel"></h5></div>
+
+                <div>
+                    <span class="mr-10" id="OrderDate"></span>
+                   
+                    <a href="javascript:;" data-dismiss="modal"><i class="flaticon-cancel"></i></a>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                   
+                 
+                    <div class="col-md-4 mt-0">
+                        <div class="form-group mb-2">
+                            <label>Name</label>
+                            <input type="text" class="form-control" placeholder="Name" id="Name" />
+                            <input type="hidden" class="form-control" placeholder="OrderNo" id="OrderNo" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-0">
+                        <div class="form-group mb-2">
+                            <label>Email address</label>
+                            <input type="email" class="form-control checkoutemail" placeholder="Enter email" id="Email" />
+                            <span class="text-danger EmailValError" id="EmailValError" style="display:none;">You have entered an invalid email address!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-0">
+                        <div class="form-group mb-2">
+                            <label>Phone</label>
+                            <input type="text" class="form-control" placeholder="Phone" id="Phone" />
+                        </div>
+                    </div>
+                     <div class="col-md-4 mt-0">
+                        <div class="form-group mb-2">
+                            <label>Address </label>
+                            <input type="text" class="form-control" placeholder="Address" id="Address" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-0">
+                        <div class="form-group mb-2">
+                            <label>Emirates</label>
+                            <select class="form-control" id="emirates-select">
+                                <option value="">Please Select</option>
+                                <option value="Dubai">DUBAI FreeDelivery</option>
+                                <option value="Abu  Dhabi ">ABU DHABI Free Delivery</option>
+                                <option value="Sharjaah">SHARJAH Free Delivery</option>
+                                <option value="Ajman">AJMAN Free Delivery</option>
+                                <option value="Ras AL Khaimah">RAS AL KHAIMAH FreeDelivery</option>
+                                <option value="Fujairah ">FUJAIRAH Free Delivery</option>
+                                <option value="Umm Al Quwain">UMM AL QUWAIN Free Delivery</option>
+                                <option value="Al ain">Al ain Free Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-5">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Products</th>                                     
+                                      
+                                        <th width="155" class="text-center">Quantity</th>
+                                        <th width="161" class="text-center">Price</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="bookinglist">
+                                </tbody>
+                            </table> 
+                            <div class="d-flex">
+                                <div class="col-md-6 px-0">
+                                    <table class="table table-bordered border-top-0 border-right-0 mb-0">
+                                        <tbody>
+                                            <tr id="methodrow">
+                                                <td width="250" class="border-top-0">
+                                                    <b>Payment Method</b>
+                                                </td>
+                                                <td colspan="2" class="check-item-total border-top-0 border-right-0">
+                                                    <div>
+                                                        <span class="mr-10px totalBookingPrice" data-amount=""><b id="PaymentMethod"></b></span>
+                                                    </div>
+                                                </td>
+                                                <td class="border-left-0 border-top-0"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 px-0">
+                                    <table class="table table-bordered border-top-0">
+                                        <tbody>
+                                            <tr>
+                                                <td width="210" class="text-right border-top-0">
+                                                    <b>Order Total</b>
+                                                </td>
+                                                <td width="155" class="check-item-total text-right border-right-0 border-top-0">
+                                                    <div>
+                                                        <span class="mr-10px totalBookingPrice" data-amount=""><b id="TotalBookingAmount"></b></span>
+                                                    </div>
+                                                </td>
+                                                <td class="border-left-0 border-right-0 border-top-0"></td>
+                                            </tr>
+                                              
+                                          
+                                         
+
+                                            <tr>
+                                                <td class="text-right border-top-0">
+                                                    <b>Paid Amount</b>
+                                                </td>
+                                                <td width="155" class="check-item-total text-right border-right-0 border-top-0">
+                                                    <div>
+                                                        <span class="mr-10px totalBookingPrice" data-amount=""><b id="paid-amount"></b></span>
+                                                    </div>
+                                                </td>
+                                                 <td class="border-left-0 border-right-0 border-top-0"></td>
+                                            </tr>
+                                           
+                                         
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer py-4" style="justify-content: space-between !important;">
+
+                <div class="FestivalDetailModelFooter" style="display: block;">
+                    <button type="button" id="btnSave" class="btn btn-md btn-primary SubmitTourBooking mr-2 ulockd-btn-thm2" dataval="0"><i class="la la-save"></i>Save</button>
+                   @* <button type="button" id="btnMail" dataval="0" dataref="" class="btn btn-md btn-success  mr-2 ulockd-btn-thm2">
+                        <i class="la la-save"></i>Resend Order Confirmation Email
+
+                    </button>*@
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="flaticon-cancel mr-10px" aria-hidden="true"></i>Close</button>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@*Payment model*@
+<div class="modal fade" id="manualPaymentModel" data-backdrop="static" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+   
+    <script>
+        function refresh() {
+            location.reload();
+        }
+        var model;
+        var template = `<div class="row-align-center mob-adjs align-start make-up-item mb-5px">
+                                                                                                                                                                                                                                   </div>`;
+
+        var dollarUS = Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+        });
+
+        function FillBookingDetails(id, bookingtypes){
+           // console.log("booking detail list");
+
+            $(".tablerow").remove();
+            $.each(bookingtypes, function (key, value) {
+
+                var tableBody = $("#bookinglist");
+                
+
+                    var markups = "<tr class='tablerow'><td>" + value.Name + "</td > <td><span>" + value.Quantity + "</span> </td><td class='text-right'>"
+                        + value.Amount + " AED</td><td class='text-center'><span></span></td></tr>";
+
+                    tableBody.append(markups);
+                
+
+
+            });
+        }
+
+        function ValidateAmount() {
+            var Validate = true;
+            var ReceivedAmount = $('#ReceivedAmount').val();          
+            var PaidDate = $('#ReceivedDate').val();
+
+           
+            if (ReceivedAmount == "" || ReceivedAmount == null || ReceivedAmount == undefined) {
+                $('#ValPaidAmount').show();
+                Validate = false;
+            } else {
+                $('#ValPaidAmount').hide();
+            }
+            if (parseFloat(ReceivedAmount) == 0 || parseFloat(ReceivedAmount) < 0) {
+                $('#ValReceivedAmount').show();
+                Validate = false;
+            } else {
+                $('#ValReceivedAmount').hide();
+            }
+            
+           
+            if (PaidDate == "" || PaidDate == undefined || PaidDate == null) {
+                $('#ValReceivedDate').show();
+                Validate = false;
+            } else {
+                $('#ValReceivedDate').hide();
+            }
+            return Validate
+
+
+        }
+        $(document).ready(function () {
+            //Menu link active Begin
+        $('.manueitemOrder').addClass('menu-item-active')
+            //Menu link active End
+            $("#SearchPaymentStatus").val("").change();
+            $(".tourDataTable").dataTable({
+                order: [[0, 'desc']],
+                "pageLength": 50
+            });
+
+
+            $(".checkoutemail").keyup(function () {
+                var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                var d = regex.test($(this).val());
+                if (d == false) {
+                    $('#EmailValError').show();
+
+                }
+                else {
+                    $('#EmailValError').hide();
+                }
+
+            });
+
+
+            $(".open-booking-modal").on("click", function () {
+                $("#BookingEditModal").modal("show");
+            });
+          
+            $(".close-second-model").on("click", function () {
+                $("#BookingEditModal").css('overflow', 'scroll');
+            });
+      
+          
+
+        });
+      
+
+
+        //For editing Booking it fill data in Booking Model and open Popup
+        $(document).on('click', '#Edit', function () {
+
+            var id = $(this).attr('dataval');
+            var fileData = new FormData();
+        fileData.append("orderId", id);
+            $.ajax({
+                type: 'Post',
+                contentType: false,
+                processData: false,
+                url: '/Order/Details',
+                data: fileData,
+                success: function (data) {
+                    if (data) {
+                        console.log(data)
+                        var model = data.list.Order;
+                        var OrderDate = model.OrderDate;
+                       
+                        var Name = model.Name;
+
+                        var Email = model.Email;
+                        var Address = model.Address;
+                        var Location= model.Emirates;
+                        var Phone = model.Phone;
+                        var PaidAmount=model.PaidAmount;
+                        var OrderAmount = model.OrderAmount;
+                      
+                        var orderNo = model.OrderNumber;
+                      
+                        $("#OrderId").val(id);
+                        $("#OrderNo").val(orderNo);
+                        $("#btnSave").attr("dataval", id);
+                        $("#btnMail").attr("dataval", id);
+                         $("#btnMail").attr("dataref", orderNo);
+                        $("#OrderDate").html('<b>Order Date :</b> ' + OrderDate);
+               
+                        $("select#emirates-select").val(Location).change();
+                     
+                        $("#Name").val(Name);
+                        $("#Phone").val(Phone);
+                        $("#Address").val(Address);
+                        $("#Email").val(Email);
+                        $("#TotalBookingAmount").text(OrderAmount+" AED");
+                        $("#BookingEditModalLabel").text(orderNo+ " Order Details")
+                        $("#PaymentMethod").text(model.orderType);
+                   
+                       $("#TotalPaidAmount").text(PaidAmount + " AED");
+                       
+                      
+                      
+                        if(model.paymentMethod == null || model.paymentMethod == undefined || model.paymentMethod == ""){
+                            $("#methodrow").hide();
+                        }
+                        else{
+                            $("#methodrow").show();
+                        }
+
+                        $("#paid-amount").text(model.totalPaid);
+
+                       var bookingtypes = data.list.OrderItems;
+                        FillBookingDetails(id, bookingtypes);                       
+                        $("#BookingEditModal").modal("show");
+                      
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Something went wrong.'
+                        })
+                    }
+
+                },
+
+
+            });
+        });
+
+
+        // saving booking data
+        $(document).on('click', '#btnSave', function () {
+
+            var id = $(this).attr('dataval');
+            var name = $("#Name").val();
+            var lastname = $("#LastName").val();
+            var email = $("#Email").val();
+            var phone = $("#Phone").val();
+            var address = $("#Address").val();
+            var emirates = $('select#emirates-select').children("option:selected").val();
+            var orderNo=$("#OrderNo").val();
+
+
+            var fileData = new FormData();
+            fileData.append("id", id);
+           
+            fileData.append("name", name);
+            fileData.append("emirates",emirates);
+            fileData.append("email", email);
+            fileData.append("phone", phone);
+            fileData.append("address", address);
+        fileData.append("orderNo", orderNo);
+
+            $.ajax({
+                url: '/Order/EditOrder',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (response) {
+                    if (response) {
+                        debugger
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order has been saved successfully.',
+                            type: "success",
+
+                        }).then(function () {
+
+                            $("#BookingEditModal").modal("hide");
+                            refresh();
+
+
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            timer: 3000,
+                            text: 'Something went wrong!',
+                        })
+                    }
+
+
+                }
+
+            });
+
+
+        });
+
+        // saving booking data and send confiration email
+        $(document).on('click', '#btnMail', function () {
+
+        $('#btnMail').prop('disabled', true);
+            var id = $(this).attr('dataval');
+          
+          
+         
+        var name = $("#Name").val();
+        var lastname = $("#LastName").val();
+        var email = $("#Email").val();
+        var phone = $("#Phone").val();
+        var address = $("#Address").val();
+        var emirates = $('select#emirates-select').children("option:selected").val();
+        var orderNo = $(this).attr('dataref');
+           
+            var fileData = new FormData();
+            fileData.append("id", id);
+           
+            fileData.append("name", name);
+            fileData.append("emirates",emirates);
+            fileData.append("email", email);
+            fileData.append("phone", phone);
+            fileData.append("address", address);
+        fileData.append("orderNo", orderNo);
+
+
+            $.ajax({
+                url: '/Cart/ResendConfirmationEmail',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (response) {
+                    if (response) {
+                         $('#btnMail').prop('disabled', false);
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Confirmation Email has been sent successfully.',
+                            type: "success",
+
+                        }).then(function () {
+
+                            $("#BookingEditModal").modal("hide");
+                            refresh();
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            timer: 3000,
+                            text: 'Something went wrong!',
+                        })
+                       $('#btnMail').prop('disabled', false);
+                    }
+
+
+                }
+
+            });
+
+
+        });
+
+
+
+    
+        //open manual payment modal
+        $(document).on('click', '#btn-manual-payment', function () {
+            const orderId = $(this).attr('data-booking-id');
+            $.ajax({
+                url: '/Order/PartialPaymentReciever?orderId=' + orderId,
+                method: 'GET',
+                success: function (result) {
+                    $('#manualPaymentModel').find('.modal-content').html(result);
+                    $('#manualPaymentModel').modal('show');
+                    $('.receive-date-picker').datepicker({ format: 'dd/mm/yyyy' });
+                }
+            });
+        });
+
+        //cancel booking link
+        $(document).on('click', '#btn-cancel-booking', function () {
+        const orderId = $(this).attr('data-booking-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, sure'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                    url: '/Order/Cancel?orderId=' + orderId,
+                        method: 'PATCH',
+                    }).then(result => {
+                        if (result) {
+                            Swal.fire(
+                                'Cancelled!',
+                                'Order has been cancelled.',
+                                'success'
+                            ).then(s => {
+                                refresh();
+                            })
+                        }
+                    }).catch(function () {
+                        SomethingWentWrong();
+                    });
+                }
+            })
+        });
+
+      
+   
+      
+        //disable button
+        //save manual payment
+        $(document).on('click', '#SubmitPayment', function () {
+            $('#SubmitPayment').prop('disabled', true);
+            var Validation = ValidateAmount();
+            if (!Validation) {
+                $('#SubmitPayment').prop('disabled', false);
+                return false;
+            }
+
+            else {
+                var data = {};
+                data.OrderId = $('#OrderId').val();
+                data.PaymentType = $('#PaymentType').val();
+                data.PaidAmount = $('#ReceivedAmount').val();           
+                data.PaidDate = $('#ReceivedDate').val();
+                data.Status = $('#Status').val();
+               
+
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Order/SaveManualPayment',
+                    data: { model: data },
+                    success: function (result) {
+
+                        if (result) {
+                          //  console.log(result)
+                            $('#SubmitPayment').prop('disabled', false);
+                            $.ajax({
+                            url: '/Order/PartialPaymentReciever?orderId=' + data.OrderId,
+                            method: 'GET',
+                            success: function (result) {
+                                $('#manualPaymentModel').find('.modal-content').html(result);
+                                $('#manualPaymentModel').modal('show');
+                                $('.receive-date-picker').datepicker({ format: 'dd/mm/yyyy' });
+                            }
+                        });
+                          
+
+                        }
+                        else {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                //text: 'Something went wrong.'
+                                html: html
+                            });
+                        }
+
+                    },
+                    error: function (err) {
+
+                        console.log(err);
+                    },
+                    complete: function () {//e, xhr, settings
+
+                    }
+                });
+            }
+        });
+
+      
+
+        //filter booking
+        $(document).on("click", "#SearchBookingBtn", function () {
+            var SearchPaymentMethod = $("#SearchPaymentMethod").val(),
+               
+                SearchPaymentStatus = $("#SearchPaymentStatus").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Order/FilterOrders',
+                data: { SearchPaymentMethod: SearchPaymentMethod,  SearchPaymentStatus: SearchPaymentStatus },
+                success: function (result) {
+                    debugger
+                    $(".tourTableDiv").html("");
+                    $(".tourTableDiv").html(result);
+                    $(".tourDataTable").dataTable({
+                        order: [[0, 'desc']],
+                        "pageLength": 50
+                    });
+                    $("#SearchPaymentMethod").val(SearchPaymentMethod).change();
+                    $("#SearchPaymentStatus").val(SearchPaymentStatus).change();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+
+        });
+
+      
+    </script>
+

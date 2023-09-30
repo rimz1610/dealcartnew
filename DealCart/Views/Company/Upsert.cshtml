@@ -1,0 +1,140 @@
+﻿@model DealCart.DAL.Models.tblCompany
+
+
+
+<div class="">
+	<div class="card card-custom gutter-b">
+		<div class="card-header">
+			<div class="card-title">
+				<h3 class="card-label">@(Model.ID != 0 ? "Update" : "Create") Company</h3>
+			</div>
+
+			<div class="card-toolbar">
+				<a href="/Company/Index" class="btn btn-danger "><i class="la la-arrow-left"></i>Back</a>
+			</div>
+
+		</div>
+		<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+			<input asp-for="ID" hidden />
+			<input asp-for="Logo" hidden />
+			<div class="card-body">
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+
+
+							<label class="control-label">Name</label>
+							<input asp-for="Name" class="form-control" />
+							<span asp-validation-for="Name" class="text-danger"></span>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label">Email</label>
+							<input asp-for="Email" class="form-control" />
+							<span asp-validation-for="Email" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label">Address</label>						
+							<input asp-for="Address" class="form-control" />
+							<span asp-validation-for="Address" class="text-danger"></span>
+						</div>
+					</div>
+					
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label">Contact</label>
+					
+							<input asp-for="Contact" type="text" class="form-control" />
+							<span asp-validation-for="Contact" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label">Facebook</label>					
+							<input asp-for="Facebook" class="form-control" />
+							<span asp-validation-for="Facebook" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label">Instagram</label>
+						
+							<input asp-for="Instagram" class="form-control" />
+							<span asp-validation-for="Instagram" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label">Twitter</label>
+						
+						<input asp-for="Twitter" class="form-control" />
+					<span asp-validation-for="Twitter" class="text-danger"></span>
+						</div>
+					</div>
+					
+					
+					<div class="col-md-6">
+						<div class="form-group">
+							<div class="form-group">
+								<label class="control-label">Logo</label>								
+								<input type="file" id="uploadBox" name="file" class="form-control" />
+							</div>
+						</div>
+					</div>
+					@if (Model.ID > 0 && Model.Logo != null)
+					{
+						<div class="col-md-6">
+							<div class="form-group">
+								<div class="form-group">
+									<img class="img-responsive " style="width:280px;height:250px" src="@Model.Logo" alt="1.jpg">
+								</div>
+							</div>
+						</div>
+
+					}
+
+				</div>
+			</div>
+
+			<div class="card-footer py-4">
+				@if (Model.ID != 0)
+				{
+					<button type="submit" class="btn btn-primary" style="width:150px">Update</button>
+				}
+				else
+				{
+					<button type="submit" onclick="return ValidateInput()" class="btn btn-primary" style="width:150px">Create</button>
+				}
+
+			</div>
+		</form>
+	</div>
+
+</div>
+
+
+@section Scripts{
+	@{
+	<partial name="_ValidationScriptsPartial" />
+	}
+<script>
+  
+  
+	function ValidateInput(){
+		if(document.getElementById("uploadBox").value==""){
+			Swal.fire({
+			  icon: 'error',
+			  title: 'Oops...',
+			  text: 'Please upload an Image!',
+			});
+			return false;
+		}
+		return true;
+	}
+</script>
+}

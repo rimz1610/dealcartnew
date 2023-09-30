@@ -1,0 +1,17 @@
+﻿body {
+}
+.showarrow {
+    position: absolute;
+    top: 45%;
+    transform: translate(-50%,0);
+    z-index: 1;
+    font-size:50px !important;
+}
+
+    .showarrow.arrowleft {
+        left: 35px;
+    }
+
+    .showarrow.arrowright {
+        right: 10px;
+    }

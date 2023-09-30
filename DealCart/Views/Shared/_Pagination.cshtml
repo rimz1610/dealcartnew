@@ -1,0 +1,34 @@
+﻿@model Pager
+@if(Model.TotalPages > 0)
+				{
+						<div class="pagination">
+						
+						@if(Model.CurrentPage > 1)
+							{
+							
+								<a class="page-link" href="@Url.Action("Shop", "Home" , new { page = 1})">First</a>
+						
+				
+								<a class="page-link" href="@Url.Action("Shop", "Home" , new { page = Model.CurrentPage-1})">Previous</a>
+							
+								
+							}
+						@for(var pge = Model.StartPage; pge <= Model.EndPage; pge++)
+						{
+							
+								<a class="page-link  @(pge == Model.CurrentPage? "active": "")" href="@Url.Action("Shop", "Home" , new { page = pge})">@pge</a>
+						
+							
+						}
+							@if(Model.CurrentPage < Model.TotalPages)
+							{
+								<a class="page-link" href="@Url.Action("Shop", "Home" , new { page = Model.CurrentPage+1})">Next</a>
+							
+								<a class="page-link" href="@Url.Action("Shop", "Home" , new { page = Model.TotalPages})">Last</a>
+							
+								
+							}
+						
+						
+					</div>
+				}

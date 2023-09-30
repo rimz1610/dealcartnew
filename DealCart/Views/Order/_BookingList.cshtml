@@ -1,0 +1,73 @@
+﻿@model List<OrderViewModel>
+  
+    
+    <div class="tourTableDiv">
+        <div class="table-responsive">
+            <table class="table table-bordered tourDataTable one-day-tour">
+                <thead>
+                    <tr>
+                        <th class="text-left">Order Number</th>
+                        <th class="text-left">Booking Date</th>
+                        <th class="text-left">Payment Method</th>
+                        <th class="text-left">Name</th>
+                        <th class="text-left">Email</th>
+                        <th class="text-left">Phone</th>
+                        <th class="text-left">Emirates</th>
+                        <th class="text-left">Total Amount</th>
+                        <th class="text-left">Paid Amount</th>
+                        <th class="text-left">Status</th>
+
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td class="text-left">@item.OrderNumber</td>
+                        <td class="text-left">@item.OrderDate</td>
+                        <td class="text-left">@item.PaymentMethod</td>
+                        <td class="text-left">@item.Name</td>
+                        <td class="text-left">@item.Email</td>
+                        <td class="text-left">@item.Phone</td>
+                        <td class="text-left">@item.Emirates</td>
+                        <td class="text-right">@item.OrderAmount AED</td>
+                        <td class="text-right">@item.PaidAmount AED</td>
+                        <th class="text-left">@item.Status.Trim()</th>
+                        <td class="text-center">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <span class="mr-2 ">
+                                    <a class="btn btn-sm btn-icon btn-icon-md btn-light-primary btn-hover-primary" dataval="@item.Id" id="Edit" title="View Detail">
+                                        <i class="fas fa-file-alt"></i>
+                                    </a>
+                                </span>
+                              
+
+                                 
+
+                                    <span class="mr-2 ">
+                                    <a class="btn btn-sm btn-icon btn-icon-md btn-light-success btn-hover-success" data-booking-id="@item.Id" id="btn-manual-payment" title="Payment">
+                                            <i class="far fa-money-bill-alt"></i>
+                                        </a>
+                                    </span>
+                              
+
+                                @if (item.Status != "Cancelled")
+                                {
+                                    <span class="mr-2" title="Cancel Order">
+                                        <a class="btn btn-sm btn-icon btn-icon-md btn-light-danger btn-hover-danger" data-booking-id="@item.Id" id="btn-cancel-booking" title="Cancel Booking">
+                                            <i class="flaticon2-cross"></i>
+                                        </a>
+                                    </span>
+                                }
+
+
+
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>

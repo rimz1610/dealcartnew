@@ -1,0 +1,276 @@
+@model DealCart.BLL.ViewModels.ProductDetailVM
+@inject IHttpContextAccessor _con;
+@{
+    int row = 0;
+    int totalQty = 0;
+    decimal totalBill = 0;
+    string amount = string.Empty;
+    Layout = "_Layout";
+}
+<style>
+    label {
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+</style>
+
+<div class="bg-gray bg-gray-200 mt-8 pb-8 px-5 pt-10">
+    <div>
+        <span class="text-dark fs-4 fw-bold">Home</span><span class="text-dark fs-5 fw-bold">/Add to Cart</span>
+    </div>
+</div>
+<div class="container-fluid mb-8">
+    <div class="row mx-auto mt-4">
+        <aside class="col-md-6">
+            <div class="h-100" style="border: 1px solid #d3d3d3;border-radius: 5px;">
+                <article class="gallery-wrap">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var item in Model.ProductImages.OrderBy(s => s.SortOrder))
+                            {
+                                i++;
+                                var active = i == 1 ? "active" : "";
+                                <div class="carousel-item @active">
+                                    <div class="img-big-wrap">
+                                        <a>
+                                            <img src="@Url.Content(@item.ImageUrl)" class="w-100" alt="@item.ImageUrl" style="height:400px">
+
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <button class="carousel-control-prev" id="carousel" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" id="carousel" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <figcaption class="info-wrap">
+                        <span class="badge badge-danger mr-1" style="float: right;">-@Model.Discount OFF</span>
+
+
+                        @if (Model.IsShippingFree == false)
+                        {
+                            <b class="badge badge-success mr-1">
+                                @Model.ShippingFee Shipping Charges
+                            </b>
+                        }
+                        <div class="fb-share-button" data-href="@Model.Url" data-layout="button"></div>
+                    </figcaption>
+
+
+                    <section class="section-name padding-y bg">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 class="title-description">Description</h5>
+                                    <p>@Html.Raw(Model.Description)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </article>
+            </div>
+        </aside>
+        <main class="col-md-6">
+            <article class="product-info-aside">
+                <h2 class="title mt-3">@Model.ShortDescription </h2>
+                <div class="rating-wrap my-3">
+                    <small class="label-rating text-success fs-5"><i class="fa fa-clipboard-check text-success fs-5"></i> @Model.Sold sold</small>
+                </div>
+                <div class="mb-3">
+                    <span class="price h4">@Model.SalePrice AED</span>
+                    <span class="text-muted price-old"><s>@Model.RealPrice AED</s> </span>
+
+
+
+                </div>
+                @if (@_con.HttpContext.Session.GetString("Order") == null)
+                {
+                    <form method="post" class="orderform" asp-action="AddToBag" asp-controller="Cart">
+                        <div class="form-group mb-3">
+
+                            <span><label for="OrderName">Full Name<span class="text-danger">*</span></label> <input type="text" name="OrderName" id="OrderName" required autocomplete="off" placeholder="Enter Name" class="form-control"> <span style="color: red;"></span></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <span><label for="OrderEmail">Email<span class="text-danger">*</span></label> <input type="email" name="OrderEmail" id="OrderEmail" required autocomplete="off" placeholder="Enter Email" class="form-control"> <span style="color: red;"></span></span>
+                        </div>
+                        <div class="form-group mb-3 fake-input">
+                            <span><label for="OrderContact">Mobile<span class="text-danger">*</span></label> <img src="https://jetronics.ae/uploads/lib/AE.png" width="20"><span class="code">+971&nbsp;</span> <input type="number" required name="OrderContact" id="OrderContact" autocomplete="off" value="" placeholder="Mobile" class="form-control"> <span style="color: red;"></span></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="quantity">Quantity<span class="text-danger">*</span></label>
+                            <select class="form-control" style="width: 100%;" id="QuantityID" name="QuantityID" required asp-items="@Model.QuantityList" class="form-select">
+                                <option disabled selected>--Select Quantity--</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="Emirates"> Emirates<span class="text-danger">*</span></label>
+                            <select class="form-control" id="Emirates" required name="Emirates" style="width: 100%;">
+                                <option disabled selected>--Select Emirates--</option>
+                                <option value="Dubai">DUBAI FreeDelivery</option>
+                                <option value="Abu  Dhabi ">ABU DHABI Free Delivery</option>
+                                <option value="Sharjaah">SHARJAH Free Delivery</option>
+                                <option value="Ajman">AJMAN Free Delivery</option>
+                                <option value="Ras AL Khaimah">RAS AL KHAIMAH FreeDelivery</option>
+                                <option value="Fujairah ">FUJAIRAH Free Delivery</option>
+                                <option value="Umm Al Quwain">UMM AL QUWAIN Free Delivery</option>
+                                <option value="Al ain">Al ain Free Delivery</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <span>
+                                <label for="OrderAddress">
+                                    Delivery Address<span class="text-danger">*</span>
+                                </label>
+                                <textarea id="OrderAddress" name="OrderAddress" required autocomplete="off" placeholder="Delivery Address" class="form-control" rows="5"></textarea>
+                            </span>
+                        </div>
+                        <div class="form-group mb-3" style="display: none;">
+                            <input type="email" id="email" name="email" placeholder="Email address" value="" class="form-control">
+                            <input type="hidden" id="" name="pid" value="258" class="form-control">
+                        </div>
+                        <div class="form-group mb-3" style="display: none;">
+                            <input type="hidden" id="ProductID" name="ProductID" value="@Model.ID" class="form-control">
+                            <input type="hidden" id="productName" value="@Model.Name" />
+                        </div>
+                        <div class="d-grid gap-2">
+                            @if (Model.Inventory == 0 || Model.Status.Trim() == "OutOfStock")
+                            {
+                                <span class="text-dark">Out of Stock</span>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success btn-submit ">SUBMIT ORDER</button>
+                            }
+
+                        </div>
+                    </form>
+
+                }
+                else
+                {
+                    <form method="post" class="orderform" asp-action="AddToCart" asp-controller="Cart">
+
+
+                        <div class="form-group mb-3">
+                            <label for="quantity">Quantity<span class="text-danger">*</span></label>
+
+                            <select class="form-control" style="width: 100%;" id="QuantityID" name="QuantityID" asp-items="@Model.QuantityList" class="form-select">
+                                <option disabled selected>--Select Quantity--</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3" style="display: none;">
+                            <input type="hidden" id="ProductID" name="ProductID" value="@Model.ID" class="form-control">
+                            <input type="hidden" id="productName" value="@Model.Name" />
+                        </div>
+                        <div class="d-grid gap-2">
+                            @if (Model.Inventory == 0 || Model.Status.Trim() == "OutOfStock")
+                            {
+                                <span class="text-dark">Out of Stock</span>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success btn-submit ">SUBMIT ORDER</button>
+                            }
+
+                        </div>
+                    </form>
+
+                }
+            </article>
+        </main>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("select#QuantityID").change(function () {
+            var selectedQuantity = $(this).children("option:selected").val();
+            var product = $("#ProductID").val();
+            // alert(selectedQuantity + product);
+
+            $.ajax({
+                url: '/Cart/CheckDuplicate?QuantityID=' + selectedQuantity + '&ProductID=' + product,
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data == true) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Already added to cart"
+
+                        });
+                    }
+
+                },
+
+            });
+
+        });
+
+        $('.orderform').submit(function (event) {
+
+            var productId = $("#ProductID").val();
+            var productName = $("#productName").val();
+            var selectedQuantity = $("select#QuantityID").children("option:selected").val();
+            $.ajax({
+                type: 'POST',
+                url: '/Product/ValidateProductStock',
+                data: { ProductId: productId, QuantityId: selectedQuantity, Name: productName },
+                success: function (result) {
+
+                    if (result.status) {
+                        this.submit();
+
+                    }
+                    else {
+
+                        var html = '';
+                        $.each(result.messages, function (index, item) {
+                            html += '<p style="text-align:left">' + item + '</p>';
+
+                        })
+
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            html: html
+                        });
+                    }
+                }
+            });
+
+
+
+        });
+
+
+
+
+
+
+
+    });
+    $(document).ready(function () {
+        $('.menu-link.home').addClass('active');
+    })
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0" nonce="YOUR_NONCE_VALUE"></script>
+

@@ -1,0 +1,140 @@
+﻿@model List<tblAdmin>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class="">
+    <div class="card card-custom gutter-b">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">Admin List</h3>
+            </div>
+            <div class="card-toolbar">
+                <a asp-controller="Admin" asp-action="Upsert" class="btn btn-primary"><i class="la la-plus"></i>Add New</a>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered datatable">
+                    <thead>
+                        <tr>
+                          
+                            <th>
+                               Image
+                            </th>
+                            <th>
+                              Name
+                            </th>
+                            <th>
+                               UserName
+                            </th>
+                            <th>
+                              Email
+                            </th>
+                            <th>
+                             PhoneNumber
+                            </th>
+                            <th>
+                                Address
+                            </th>
+
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var obj in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    <img src="@obj.ImageURL" height="100px" width="50%" />
+                                </td>
+                                <td>
+                                    @(obj.FirstName + " " + obj.LastName)
+                                </td>
+                                <td>
+                                    @obj.UserName
+                                </td>
+                                <td>
+                                    @obj.Email
+                                </td>
+                              
+                                <td>
+                                    @obj.PhoneNumber
+                                </td>
+                                <td>
+                                    @obj.Address
+                                </td>
+                                <td class="text-center">
+                                   
+                                    <a asp-controller ="Admin" asp-action="Upsert" asp-route-id="@obj.ID" class="btn btn-sm btn-icon btn-light-primary btn-hover-primary" data-bs-toggle="tooltip" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-icon btn-icon-md btn-light-danger btn-hover-danger " id="btnDelete" data-userid="@obj.ID" data-bs-toggle="tooltip" data-placement="top" title="Delete">
+                                        <i class="la la-trash-o"></i>
+                                    </a>
+                                  
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).on("click", "#btnDelete", function () {
+        var id = $(this).data('userid');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/Admin/Delete?id=" + id,
+                    type: "GET",
+                    success: function (response) {
+                        if (response) {
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Admin has been deleted successfully.',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                window.location.replace("/Admin/Index");
+                            })
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+    })
+</script>
+
+
+
+
+
+
+
+

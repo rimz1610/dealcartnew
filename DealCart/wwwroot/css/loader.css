@@ -1,0 +1,31 @@
+﻿
+ body.addLoader .showloader
+{
+    display: block !important;
+}
+
+body.addLoader {
+    overflow: hidden !important;
+}
+
+
+
+.showloader {
+    display: none;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    z-index: 9999;
+    background: rgba(255,255,255, 0.8);
+    right: 0;
+}
+
+    .showloader img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+

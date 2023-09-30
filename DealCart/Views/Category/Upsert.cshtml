@@ -1,0 +1,71 @@
+﻿@model DealCart.DAL.Models.tblCategory
+
+
+<div class="">
+    <div class="card card-custom gutter-b">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@(Model.ID!=0?"Update": "Create") Category</h3>
+            </div>
+
+            <div class="card-toolbar">
+                <a href="/Category/Index" class="btn btn-danger "><i class="la la-arrow-left"></i>Back</a>
+            </div>
+
+        </div>
+        <form method="post" asp-action="Upsert"  enctype="multipart/form-data">
+			<input asp-for="ID" hidden />
+		
+            <div class="card-body">
+               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+						
+							
+							<label class="control-label">Name</label>
+							<input asp-for="Name" class="form-control" />
+							<span asp-validation-for="Name" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label" >Description</label>
+                            <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+			
+            <div class="card-footer py-4">
+				@if (Model.ID != 0)
+				{
+					<button type="submit" class="btn btn-primary"><i class="la la-save"></i>Update</button>
+				}
+				else
+				{
+					<button type="submit"  class="btn btn-primary"><i class="la la-save"></i>Create</button>
+				}
+            
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+@section Scripts{
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script></strong>
+    <script>
+        tinymce.init({
+            selector: "textarea"
+        });
+    </script>
+}

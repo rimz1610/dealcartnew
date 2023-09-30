@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\Admin\plugins\bower_components\chartist-plugin-tooltips\dist\chartist-plugin-tooltip.css" />
+    <Content Include="wwwroot\Admin\plugins\bower_components\chartist\dist\chartist.min.css" />
+    <Content Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\css\perfect-scrollbar.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Admin\plugins\bower_components\.DS_Store" />
+    <None Include="wwwroot\Admin\plugins\bower_components\chartist-plugin-tooltips\dist\chartist-plugin-tooltip.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\chartist\dist\chartist.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\counterup\jquery.counterup.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\gmaps.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\gmaps.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\gmaps.min.js.map" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\jquery.gmaps.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.controls.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.core.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.events.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.geofences.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.geometry.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.layers.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.map_types.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.markers.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.native_extensions.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.overlays.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.routes.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.static.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.streetview.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.styles.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\gmaps\lib\gmaps.utils.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\jquery-sparkline\jquery.charts-sparkline.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\jquery-sparkline\jquery.sparkline.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\jquery\dist\core.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\jquery\dist\jquery.slim.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\js\perfect-scrollbar.jquery.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\js\perfect-scrollbar.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\perfect-scrollbar.common.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\perfect-scrollbar.esm.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\perfect-scrollbar.jquery.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\perfect-scrollbar\dist\perfect-scrollbar.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\popper.js\dist\esm\popper-utils.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\popper.js\dist\esm\popper.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\popper.js\dist\popper-utils.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\popper.js\dist\popper.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\popper.js\dist\umd\popper-utils.min.js" />
+    <None Include="wwwroot\Admin\plugins\bower_components\popper.js\dist\umd\popper.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ElmahCore" Version="2.1.2" />
+    <PackageReference Include="ElmahCore.Sql" Version="2.1.2" />
+    <PackageReference Include="LinqKit" Version="1.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.0-preview.7.21378.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-preview.7.21378.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-preview.7.21378.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-preview.7.21378.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DealCart.BLL\DealCart.BLL.csproj" />
+    <ProjectReference Include="..\DealCart.DAL\DealCart.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Users\Rimsha\Desktop\EAD Assign\EAD Assign\Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

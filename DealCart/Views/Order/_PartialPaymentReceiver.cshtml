@@ -1,0 +1,108 @@
+﻿@model tblOrder
+
+<div class="modal-header d-flex align-items-center justify-content-between">
+    <div>
+        <h5 class="modal-title" id="">Received Payment Details</h5>
+    </div>
+    <div>
+        <a href="javascript:;" data-dismiss="modal"><i class="flaticon-cancel "  ></i></a>
+    </div>
+</div>
+
+    <form id="frm-manual-payment" >
+
+        <div class="modal-body">
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Trans Reference Number</th>
+                            <th>Payment Date</th>
+                            <th>Payment Method</th>
+                            <th>Paid Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.tblOrderPayments)
+                        {
+                        <tr>
+                            <td>@item.TxnRef</td>
+                            <td>@item.PaidDate?.ToString("dd-MMM-yyyy")</td>
+                            @if (item.PaymentType == "Cash on Delivery")
+                                {
+                                <td>Cash on Delivery</td>
+                                }
+                            else if (item.PaymentType?.ToLower() == "Cash by PayPal")
+                                {
+                                <td>Cash by PayPal</td>
+                                }
+                                else
+                                {
+                            <td>N/A</td>
+                                }
+                            <td>@item.PaidAmount</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        @if (Model.PaymentType == "Cash on Delivery" && (Model.TotalAmount) != Model.PaidAmount)
+
+            {
+            <input type="hidden" name="OrderId" id="OrderId" value="@Model.ID" />
+            <input type="hidden" name="PaymentType" id="PaymentType" value="Cash on Delivery" />
+            <input type="hidden" name="Status" id="Status" value="Paid" />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Received Date:</label>
+                        <input id="ReceivedDate" name="PaidDate" type="text" class="form-control w-100 receive-date-picker" required />
+                        <span class="text-danger ValReceivedDate" id="ValReceivedDate" style="display:none;">Required</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Received Amount:</label>
+                        <input id="ReceivedAmount" name="PaidAmount" type="number" step=".01" class="form-control " required />
+                        <span class="text-danger ValPaidAmount" id="ValPaidAmount" style="display:none;">Required</span>
+                        <span class="text-danger ValReceivedAmount" id="ValReceivedAmount" style="display:none;">Value must be greater than zero</span>
+                    </div>
+                </div>
+              
+                
+            </div>
+          
+            }
+
+        </div>
+        <div class="modal-footer py-4" style="justify-content: space-between !important;">
+        @if (Model.PaymentType == "Cash on Delivery" && (Model.TotalAmount) != Model.PaidAmount)
+            {
+                <div>
+                    <button type="button" id="SubmitPayment" class="btn btn-primary" href="javascript:;"><i class="la la-save"></i>Save</button>
+
+                </div>
+
+            }
+        @if (Model.PaymentType == "Cash on Delivery" && Model.Status != "UnPaid")
+            {    <div>
+                    <button type="button" class="btn btn-secondary btn-refresh" data-dismiss="modal"><i class="flaticon-cancel"></i>Close</button>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal"><i class="flaticon-cancel"></i>Close</button>
+                </div>
+            }
+
+
+
+
+
+
+
+        </div>
+    </form>
+   

@@ -1,0 +1,156 @@
+﻿@model DealCart.DAL.Models.tblAdmin
+
+
+<div class="">
+    <div class="card card-custom gutter-b">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@(Model.ID != 0 ? "Update" : "Create") Admin</h3>
+            </div>
+
+            <div class="card-toolbar">
+                <a href="/Admin/Index" class="btn btn-danger "><i class="la la-arrow-left"></i>Back</a>
+            </div>
+
+        </div>
+        <form method="post" asp-action="Upsert" enctype="multipart/form-data" id="userForm">
+            <input asp-for="ID" hidden />
+            <input asp-for="ImageURL" hidden/>
+
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">User Name</label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Password</label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Contact</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Address</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label class="control-label">Select Profile</label>
+                            <input type="file" id="uploadBox" name="file" class="form-control" />
+                        </div>
+                    </div>
+                    @if(Model.ID>0 && Model.ImageURL != null)
+                    {
+                       <div class="col-md-6">
+
+                            <img class="img-responsive" id="Model.ImageURL" style="height: 100px;" src="@Model.ImageURL" alt="1.jpg">
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="card-footer py-4">
+                @if (Model.ID != 0)
+                {
+                    <button type="submit" class="btn btn-primary"><i class="la la-save"></i>Update</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary"><i class="la la-save"></i>Create</button>
+                }
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+@section Scripts{
+
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+   
+    <script>
+
+        $('#userForm').submit(function (event) {
+
+            var fileInput = document.getElementById('uploadBox');
+            var uploadedFilesCount = fileInput.files.length;      
+            var id = @Model.ID;
+            var imageUrl = @Model.ImageURL;
+            if (uploadedFilesCount === 0 && id == 0) {
+                event.preventDefault(); // Prevent form submission
+                Swal.fire({
+                    icon: 'error',
+                    title: "Please upload profile"
+
+                });
+                return;
+            }
+            else if (id > 0 && uploadedFilesCount === 0 && iimageUrl === "") {
+                event.preventDefault(); // Prevent form submission
+                Swal.fire({
+                    icon: 'error',
+                    title: "Please upload profile"
+
+                });
+                return;
+
+            }
+
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Your work saved successfully.'
+
+            });
+
+        });
+    </script>
+
+        
+
+}

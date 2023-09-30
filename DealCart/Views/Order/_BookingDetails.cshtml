@@ -1,0 +1,288 @@
+﻿@*@model CherryBlossom.Library.DAL.TblBooking
+@inject CherryBlossom.Library.BLL.IServices.Icommons common
+
+<table style="--bs-table-bg: transparent; --bs-table-accent-bg: transparent; --bs-table-striped-color: #212529; --bs-table-striped-bg: rgba(0, 0, 0, 0.05);  --bs-table-active-bg: rgba(0, 0, 0, 0.1); --bs-table-hover-color: #212529; --bs-table-hover-bg: rgba(0, 0, 0, 0.075); width: 100%;  vertical-align: top;  border-spacing: 0px !important;">
+    <thead style="vertical-align: bottom; border-width: 0; border-style: solid; background-color: #e6a3b5;">
+        <tr>
+            <th style="color: #fff; text-align: left; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6;  ">Type</th>
+            <th style="color: #fff; text-align: left; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; ">Details</th>
+            <th style="width: 155px; color: #fff; text-align: center; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6; ">Item Total</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null)
+        {
+
+            if (Model.TblBookingTours != null)
+            {
+                foreach (var item in Model.TblBookingTours)
+                {
+                    int index = 1;
+                    var deptdate = @item.DeptDate;
+                    var dateYear = deptdate?.Year;
+                    <tr>
+                        <td style="vertical-align: baseline; text-align: left; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6;">
+                            Tour
+                        </td>
+                        <td style="text-align: left; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6;">
+                            <span><b>@item.Tour.Name</b></span>
+                            <br />
+
+
+                            <span>Passenger(s): @item.NoOfPassenger, Departure Date: @item.DeptDate?.ToString("ddd dd MMM") @dateYear, Room Type: @item.RoomType</span>
+                            <br />
+                            @foreach (var innerItem in item.TblBookingTourPassengers)
+                            {
+                                <span>Passenger @index: @innerItem.Title. @innerItem.FirstName @innerItem.LastName, @innerItem.Email, @innerItem.Phone, @innerItem.Location</span>
+                                <br />
+                                index++;
+                            }
+                        </td>
+                        <td style="vertical-align: baseline; text-align: right; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6;">
+                            @String.Format(Constants.AmountFormat, Convert.ToInt32(item.Amount))
+                        </td>
+                    </tr>
+                }
+            }
+            if (Model.TblBookingFestivals != null)
+            {
+               
+            foreach (var item in Model.TblBookingFestivals.Where(f=>f.Status.Trim()!="Cancelled"))
+                {
+                    <tr>
+                        <td style="vertical-align: baseline; text-align: left; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; ">
+                            Event
+                        </td>
+                        <td style="text-align: left; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; ">
+
+                            <span><b>@item.Event.Name</b></span>
+                            <br />
+                            @if (item.NoOfAdultAdmissionTicket > 0 && item.EventId < 3)
+                            {
+                                var otherCostumes = item.BookingFestivalCostumeSize.Where(s => s.Gender == null);
+                                string furtherDetail = string.Empty;
+                                var fsmall = otherCostumes.Where(s => s.Size == "Female-Small").Count();
+                                var fmedium = otherCostumes.Where(s => s.Size == "Female-Medium").Count();
+                                var flarge = otherCostumes.Where(s => s.Size == "Female-Large").Count();
+                                var fextralarge = otherCostumes.Where(s => s.Size == "Female-XL").Count();
+                                var msmall = otherCostumes.Where(s => s.Size == "Male-Small").Count();
+                                var mmedium = otherCostumes.Where(s => s.Size == "Male-Medium").Count();
+                                var mlarge = otherCostumes.Where(s => s.Size == "Male-Large").Count();
+                                var mxl = otherCostumes.Where(s => s.Size == "Male-XL").Count();
+                                var mxxl = otherCostumes.Where(s => s.Size == "Male-XXL").Count();
+
+                                if (fsmall > 0)
+                                    furtherDetail += $"Female-Small: {fsmall}, ";
+                                if (fmedium > 0)
+                                    furtherDetail += $"Female-Medium: {fmedium}, ";
+                                if (flarge > 0)
+                                    furtherDetail += $"Female-Large: {flarge}, ";
+                                if (fextralarge > 0)
+                                    furtherDetail += $"Female-XL: {fextralarge}, ";
+                                if (msmall > 0)
+                                    furtherDetail += $"Male-Small: {msmall}, ";
+                                if (mmedium > 0)
+                                    furtherDetail += $"Male-Medium: {mmedium}, ";
+                                if (mlarge > 0)
+                                    furtherDetail += $"Male-Large: {mlarge}, ";
+                                if (mxl > 0)
+                                    furtherDetail += $"Male-XL: {mxl}, ";
+                                if (mxxl > 0)
+                                    furtherDetail += $"Male-XXL: {mxxl}, ";
+                                furtherDetail = furtherDetail.Trim();
+                                furtherDetail = furtherDetail.EndsWith(',') ? furtherDetail[..^1] : furtherDetail;
+
+                                <span>Admission Ticket(s): @($"{item.NoOfAdultAdmissionTicket} {furtherDetail}".RemoveTrailingComma())</span>
+                            }
+                            @if (item.NoOfAdultAdmissionTicket > 0 && item.EventId > 2)
+                            {
+
+                                <span>Adult Admission Ticket(s): @item.NoOfAdultAdmissionTicket</span>
+                            }
+
+
+                            @if (item.NoOfChildAdmissionTicket > 0)
+                            {
+
+                                <span>@(item.NoOfAdultAdmissionTicket > 0 ? ", " : "")Child Admission Ticket(s): @item.NoOfChildAdmissionTicket</span>
+
+                            }
+                            @if (item.NoOfFamilyAdmissionTicket > 0)
+                            {
+
+                                <span>@(item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 ? ", " : "")Family Admission Ticket(s): @item.NoOfFamilyAdmissionTicket</span>
+
+                            }
+                            @if (item.NoOfCostumeTicket > 0)
+                            {
+                                var otherCostumes = item.BookingFestivalCostumeSize.Where(s => s.Gender == "C");
+                                string furtherDetail = string.Empty;
+                                var fsmall = otherCostumes.Where(s => s.Size == "Female-Small").Count();
+                                var fmedium = otherCostumes.Where(s => s.Size == "Female-Medium").Count();
+                                var flarge = otherCostumes.Where(s => s.Size == "Female-Large").Count();
+                                var fextralarge = otherCostumes.Where(s => s.Size == "Female-XL").Count();
+                                var msmall = otherCostumes.Where(s => s.Size == "Male-Small").Count();
+                                var mmedium = otherCostumes.Where(s => s.Size == "Male-Medium").Count();
+                                var mlarge = otherCostumes.Where(s => s.Size == "Male-Large").Count();
+                                var mxl = otherCostumes.Where(s => s.Size == "Male-XL").Count();
+                                var mxxl = otherCostumes.Where(s => s.Size == "Male-XXL").Count();
+
+                                if (fsmall > 0)
+                                    furtherDetail += $"Female-Small: {fsmall}, ";
+                                if (fmedium > 0)
+                                    furtherDetail += $"Female-Medium: {fmedium}, ";
+                                if (flarge > 0)
+                                    furtherDetail += $"Female-Large: {flarge}, ";
+                                if (fextralarge > 0)
+                                    furtherDetail += $"Female-XL: {fextralarge}, ";
+                                if (msmall > 0)
+                                    furtherDetail += $"Male-Small: {msmall}, ";
+                                if (mmedium > 0)
+                                    furtherDetail += $"Male-Medium: {mmedium}, ";
+                                if (mlarge > 0)
+                                    furtherDetail += $"Male-Large: {mlarge}, ";
+                                if (mxl > 0)
+                                    furtherDetail += $"Male-XL: {mxl}, ";
+                                if (mxxl > 0)
+                                    furtherDetail += $"Male-XXL: {mxxl}, ";
+                                furtherDetail = furtherDetail.Trim();
+                                furtherDetail = furtherDetail.EndsWith(',') ? furtherDetail[..^1] : furtherDetail;
+
+                                <span>@(item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")Costume Ticket(s): @($"{item.NoOfCostumeTicket} {furtherDetail}".RemoveTrailingComma())</span>
+                            }
+                            @if (item.NoOfVIPtickets1 > 0)
+                            {
+                                var maleCostumes = item.BookingFestivalCostumeSize.Where(s => s.Gender == "M");
+                                string furtherDetail = string.Empty;
+                                var smallSizes = maleCostumes.Where(s => s.Size == "Small").Count();
+                                var medium = maleCostumes.Where(s => s.Size == "Medium").Count();
+                                var large = maleCostumes.Where(s => s.Size == "Large").Count();
+                                var xl = maleCostumes.Where(s => s.Size == "XL").Count();
+                                var xxl = maleCostumes.Where(s => s.Size == "XXL").Count();
+                                if (smallSizes > 0)
+                                    furtherDetail += $"Small: {smallSizes}, ";
+                                if (medium > 0)
+                                    furtherDetail += $"Medium: {medium}, ";
+                                if (large > 0)
+                                    furtherDetail += $"Large: {large}, ";
+                                if (xl > 0)
+                                    furtherDetail += $"XL: {xl}, ";
+                                if (xxl > 0)
+                                    furtherDetail += $"XXL: {xxl}";
+                                furtherDetail = furtherDetail.Trim();
+                                furtherDetail = furtherDetail.EndsWith(',') ? furtherDetail[..^1] : furtherDetail;
+                                <span>@(item.NoOfAdultAdmissionTicket > 0 || item.NoOfCostumeTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")@item?.Event?.VIPAdmissionTicketsCaption1: @($"{item.NoOfVIPtickets1}, {furtherDetail}".RemoveTrailingComma())</span>
+                            }
+                            @if (item.NoOfVIPtickets2 > 0)
+                            {
+                                var femaleCostumes = item.BookingFestivalCostumeSize.Where(s => s.Gender == "F");
+                                var femaleSessionTime = item.TblBookingFestivalMakeup.Where(s => s.Type == "F" && s.Type != null).FirstOrDefault();
+                                string furtherDetail = string.Empty;
+                                string sessionDetail = string.Empty;
+                                if (femaleSessionTime != null)
+                                {
+                                    sessionDetail = "Makeup Session at " + @common.ConvertTimeToStringAM_and_PM(femaleSessionTime.SessionTime.HasValue ? femaleSessionTime.SessionTime.Value : new TimeSpan());
+
+                                }
+                                var smallSizes = femaleCostumes.Where(s => s.Size == "Small").Count();
+                                var medium = femaleCostumes.Where(s => s.Size == "Medium").Count();
+                                var large = femaleCostumes.Where(s => s.Size == "Large").Count();
+                                var xl = femaleCostumes.Where(s => s.Size == "Extra-Large").Count();
+                                if (smallSizes > 0)
+                                    furtherDetail += $"Small: {smallSizes}, ";
+                                if (medium > 0)
+                                    furtherDetail += $"Medium: {medium}, ";
+                                if (large > 0)
+                                    furtherDetail += $"Large: {large}, ";
+                                if (xl > 0)
+                                    furtherDetail += $"Extra-Large: {xl}";
+                                sessionDetail = sessionDetail.Trim();
+                                furtherDetail = furtherDetail.Trim();
+
+                                furtherDetail = furtherDetail.EndsWith(',') ? furtherDetail[..^1] : furtherDetail;
+                                <span>@(item.NoOfVIPtickets1 > 0 || item.NoOfCostumeTicket > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")@item?.Event?.VIPAdmissionTicketsCaption2: @($"{item.NoOfVIPtickets2}, {sessionDetail}, {furtherDetail}".RemoveTrailingComma())</span>
+                            }
+                            @if (item.NoOfAdultHighTea > 0 && item.EventId < 3)
+                            {
+                                <span>@(item.NoOfVIPtickets2 > 0 || item.NoOfCostumeTicket > 0 || item.NoOfVIPtickets1 > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")High Tea(s): @item.NoOfAdultHighTea at @common.ConvertTimeToStringAM_and_PM(item.HighTeaTime.HasValue ? item.HighTeaTime.Value : new TimeSpan())</span>
+                            }
+                            @if ((item.NoOfAdultHighTea > 0 || item.NoOfChildHighTea > 0) && item.EventId > 2)
+                            {
+                                @if (item.NoOfAdultHighTea > 0 && item.NoOfChildHighTea == 0)
+                                {
+                                    <span>@(item.NoOfVIPtickets2 > 0 || item.NoOfCostumeTicket > 0 || item.NoOfVIPtickets1 > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")Adult High Tea(s): @item.NoOfAdultHighTea at @common.ConvertTimeToStringAM_and_PM(item.HighTeaTime.HasValue ? item.HighTeaTime.Value : new TimeSpan())</span>
+
+                                }
+                                else if (item.NoOfChildHighTea > 0 && item.NoOfAdultHighTea == 0)
+                                {
+                                    <span>@(item.NoOfVIPtickets2 > 0 || item.NoOfCostumeTicket > 0 || item.NoOfVIPtickets1 > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")Child High Tea(s): @item.NoOfChildHighTea at @common.ConvertTimeToStringAM_and_PM(item.HighTeaTime.HasValue ? item.HighTeaTime.Value : new TimeSpan())</span>
+
+                                }
+                                else if (item.NoOfAdultHighTea > 0 && item.NoOfChildHighTea > 0)
+                                {
+                                    <span>@(item.NoOfVIPtickets2 > 0 || item.NoOfCostumeTicket > 0 || item.NoOfVIPtickets1 > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")Adult High Tea(s): @item.NoOfAdultHighTea, Child High Tea(s): @item.NoOfChildHighTea at @common.ConvertTimeToStringAM_and_PM(item.HighTeaTime.HasValue ? item.HighTeaTime.Value : new TimeSpan())</span>
+
+                                }
+
+                            }
+                            @if (Convert.ToInt32(item.Umbrellas) > 0)
+                            {
+                                <span>@(item.NoOfChildHighTea > 0 || item.NoOfAdultHighTea > 0 || item.NoOfCostumeTicket > 0 || item.NoOfVIPtickets2 > 0 || item.NoOfVIPtickets1 > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")Umbrella(s): @item.Umbrellas</span>
+                            }
+                            @if (Convert.ToInt32(item.PicnicBaskets) > 0)
+                            {
+                                <span>@(item.NoOfChildHighTea > 0 || item.Umbrellas > 0 || item.NoOfCostumeTicket > 0 || item.NoOfAdultHighTea > 0 || item.NoOfVIPtickets2 > 0 || item.NoOfVIPtickets1 > 0 || item.NoOfAdultAdmissionTicket > 0 || item.NoOfChildAdmissionTicket > 0 || item.NoOfFamilyAdmissionTicket > 0 ? ", " : "")Picnic Basket(s): @item.PicnicBaskets</span>
+                            }
+
+                            @if (item.TblBookingFestivalMakeup.Where(s => s.Type == null) != null && item.TblBookingFestivalMakeup.Where(s => s.Type == null).Count() > 0)
+                            {
+
+                                <br />
+                                <span>Beauty Makeup Session(s):</span>
+                                int i = 0;
+                                foreach (var innerItem in item.TblBookingFestivalMakeup.Where(s => s.Type == null))
+                                {
+                                    <br />
+                                    i += 1;
+                                    <span class="book-item">Session @i: Time: @common.ConvertTimeToStringAM_and_PM(innerItem.SessionTime.HasValue ? innerItem.SessionTime.Value : new TimeSpan())</span>
+                                    <span class="book-item">No. Of Person(s): @innerItem.NoOfPersons</span>
+                                    <span class="book-item">Location: @innerItem.Location</span>
+                                }
+                            }
+                        </td>
+                        <td style="vertical-align: baseline; text-align: right; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6;">
+                            @String.Format(Constants.AmountFormat, Convert.ToInt32(item.PaidAmount))
+                        </td>
+                    </tr>
+                }
+            }
+
+        }
+
+
+
+        <tr>
+            <td colspan="2" style="text-align: right; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6;  border-left: 1px solid #dee2e6;">
+                Total
+            </td>
+            <td style="text-align: right; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6;  border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6; ">
+                <span>@Model.Currency @String.Format(Constants.AmountFormat, Convert.ToInt32(Model.BookingAmount))</span>
+
+            </td>
+        </tr>
+        <tr>
+            @{
+               decimal? totalGST=0;
+                totalGST = (Model.BookingAmount * 100) / 115;
+                totalGST = (totalGST * 15) / 100;
+               
+                <td colspan="3" style="text-align: right; padding: 0.5rem 0.5rem; border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; border-left: 1px solid #dee2e6;  border-right: 1px solid #dee2e6;">
+                    Includes GST of @String.Format(Constants.AmountFormat, totalGST)
+                </td>
+            }
+          
+
+        </tr>
+    </tbody>
+</table>*@

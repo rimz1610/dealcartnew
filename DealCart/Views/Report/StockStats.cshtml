@@ -1,0 +1,103 @@
+﻿@model List<tblProduct>
+
+
+@{
+    var categories = @ViewBag.Categories;
+    ViewData["Title"] = "Stock Report";
+   
+
+}
+
+
+<div class="">
+    <div class="card card-custom gutter-b">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">Product Stock</h3>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label style="font-weight:bold">Select Category</label>
+                    <select class="Family form-control" name="Category" id="CatId">
+                     
+                        @foreach (var item in categories)
+                        { 
+                            <option value="@item.ID">@item.Name</option>
+
+                        }
+                       
+
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="stockpartial">
+             
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+        
+
+    $(document).ready(function () {
+        $(".manueitemReport").addClass("menu-item-active");
+        $(".manueItemStockStat").addClass("menu-item-active");
+     
+       $("#CatId option:eq(0)").prop("selected", true);
+        var Selected = $("#CatId").val();
+
+        if (Selected!= '' || Selected != undefined || Selected != null) {
+            $.ajax({
+                type: 'POST',
+                url: '/Report/SelectedCategoryStats',
+                data: { catId: Selected },
+                success: function (result) {
+                    
+                    $(".stockpartial").html("");
+                    $(".stockpartial").html(result);
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+
+
+  
+    })
+
+   
+    $(document).on("change", "#CatId", function () {
+        var Selected = $("#CatId").val();
+
+        if (Selected != '' || Selected != undefined || Selected != null) {
+            $.ajax({
+                type: 'POST',
+                url: '/Report/SelectedCategoryStats',
+                data: { catId: Selected },
+                success: function (result) {
+                    $(".stockpartial").html("");
+                    $(".stockpartial").html(result);
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+
+
+
+    });
+
+</script>
