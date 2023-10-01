@@ -21,7 +21,7 @@ namespace DealCart.BLL.Services
         }
         public int GetLoginUser(string UserName, string Password)
         {
-            var user = db.tblAdmins.Where(u => u.UserName.ToLower() == UserName.ToLower() && u.Password.ToLower() == Password.ToLower()).FirstOrDefault();
+            var user = db.tblAdmins.Where(u => u.UserName == UserName && u.Password == Password).FirstOrDefault();
 
             if (user != null)
             {
@@ -96,10 +96,34 @@ namespace DealCart.BLL.Services
 			}
 		}
 
-
-		public bool VerifyUserName(string UserName)
+        public bool UpdatePassword(int id , string password)
         {
-			var data = db.tblAdmins.Where(x => x.UserName.ToLower() == UserName.ToLower()).FirstOrDefault();
+            var admin = db.tblAdmins.FirstOrDefault(a => a.ID == id);
+
+            if (admin != null)
+            {
+                try
+                {
+                    admin.Password = password;
+                    db.tblAdmins.Update(admin);
+                    db.SaveChanges();
+                    return true;
+                }
+
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool VerifyUserName(string UserName)
+        {
+			var data = db.tblAdmins.Where(x => x.UserName == UserName).FirstOrDefault();
 			if (data != null)
 			{
 				return false;
@@ -115,9 +139,9 @@ namespace DealCart.BLL.Services
             return db.tblAdmins.OrderByDescending(a => a.ID).ToList();
         }
 
-        public List<tblAdmin> GetCurrentAdmin(string UserName)
+        public tblAdmin GetAdminByUserName(string UserName)
         {
-            return db.tblAdmins.Where(u=>u.UserName.ToLower()==UserName).OrderByDescending(a => a.ID).ToList();
+            return db.tblAdmins.Where(u=>u.UserName==UserName).FirstOrDefault();
         }
 
 
@@ -134,7 +158,6 @@ namespace DealCart.BLL.Services
         }
 
        
-
 
     }
 }

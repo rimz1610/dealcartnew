@@ -9,6 +9,10 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+using System.Configuration;
+using DealCart.Helper;
+using DealCart.BLL.Helper;
 
 namespace DealCart.Controllers
 {
@@ -18,11 +22,13 @@ namespace DealCart.Controllers
         private readonly IHome _home;
         private readonly IWebHostEnvironment _hostEnvironment;
         public readonly IHttpContextAccessor _con;
-        public AdminController( IHome home,   IAdmin admin, IWebHostEnvironment hostEnvironment, IHttpContextAccessor contextAccessor)
+        public readonly IConfiguration _configuration;
+        public AdminController( IHome home,   IAdmin admin, IConfiguration configuration, IWebHostEnvironment hostEnvironment, IHttpContextAccessor contextAccessor)
         {
             _admin = admin;
             _home = home;
             _con=contextAccessor;
+            _configuration = configuration;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -40,18 +46,18 @@ namespace DealCart.Controllers
             int result = _admin.GetLoginUser(UserName, Password);
             if (result == 1)
             {
-               
-                ViewBag.Message = "Incorrect email or password";
-                return View();
-            }
-            else
-            {
-
                 HttpContext.Session.SetString("UserName", UserName);
                 HttpContext.Session.SetString("Role", "Admin");
 
-               // TempData["success"] = "Login successfully";
+                // TempData["success"] = "Login successfully";
                 return RedirectToAction("Dashboard", "Admin");
+               
+            }
+            else
+            {
+                ViewBag.Message = "Incorrect email or password";
+                return View();
+
             }
 
         }
@@ -156,6 +162,59 @@ namespace DealCart.Controllers
             HttpContext.Session.SetString("Role", "");
             return RedirectToAction("Login");
         }
+
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+      
+        [HttpPost]
+        public IActionResult ForgotPassword(string  UserName)
+        {
+            string baseUrl = $"{_con.HttpContext.Request.Scheme}://{_con.HttpContext.Request.Host}";
+            var user = _admin.GetAdminByUserName(UserName);
+            try
+            {
+                var token = Helper.Common.Encryption(user.ID.ToString());              
+                string subject = "Change Password";
+                string body = "<p>Hi " + user.FirstName + " " + user.LastName + ",</p><p>Please <a href='" + baseUrl + "/Admin/ResetPassword?email=" + user.Email + "&code=" + token + "'>click here</a> to reset your password.<p>Thanks</p>";
+                int EmailResponse = EmailSender.EmailSend(_configuration, subject, user.Email, body);
+                ViewBag.Message = EmailResponse == 1 ? "Please check your inbox" : "Please check your username";
+                return View();
+            }
+            catch (System.Exception)
+            {
+                ViewBag.Message = "Something went wrong";
+                return View();
+            }
+        }
+        public ActionResult ResetPassword(string email, string code)
+        {
+            ViewBag.EncryptId = code;
+            ViewBag.Email = email;
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public JsonResult ChangePassword(string Id, string NewPassword)
+        {
+            string decryptId = Helper.Common.Decryption(Id);
+            if (decryptId != null)
+            {
+                var result = _admin.UpdatePassword(Convert.ToInt32(decryptId), NewPassword);
+                return Json(result);
+            }
+            else
+            {
+                return Json(false);
+            }
+           
+            
+        }
+
+      
+
 
     }
 }
