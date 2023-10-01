@@ -236,8 +236,7 @@ namespace DealCart.BLL.Services
                 product.Inventory = model.Inventory;
                 product.ShippingCharges = 0;
                 product.IsShippingFree = model.IsShippingFree;
-                if(model.IsShippingFree== true)
-                {
+                if(model.IsShippingFree== false)                {
                     product.ShippingCharges = model.ShippingFee;
                 }
                 product.Status = model.Status.Trim();
