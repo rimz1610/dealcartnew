@@ -101,7 +101,15 @@
                                 </div>
                                 <div>
                                     <div class="">
-                                        <label class="badge badge-success badge-rounded">Free Delievery</label>
+                                        @if (items.IsShippingFree == false)
+                                        {
+                                            <label class="badge badge-success badge-rounded">@items.ShippingCharges Delievery Charges</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="badge badge-success badge-rounded">Free Delievery</label>
+                                        }
+
                                     </div>
                                     <div class="">
                                         <label class="Product_name fs-6 mt-2">@items.Name</label>
