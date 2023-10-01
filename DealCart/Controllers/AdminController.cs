@@ -28,6 +28,8 @@ namespace DealCart.Controllers
 
         public IActionResult Login()
         {
+            HttpContext.Session.SetString("UserName", "");
+            HttpContext.Session.SetString("Role", "");
             return View();
         }
 
@@ -38,16 +40,20 @@ namespace DealCart.Controllers
             int result = _admin.GetLoginUser(UserName, Password);
             if (result == 1)
             {
-
                
+                ViewBag.Message = "Incorrect email or password";
+                return View();
+            }
+            else
+            {
+
                 HttpContext.Session.SetString("UserName", UserName);
                 HttpContext.Session.SetString("Role", "Admin");
-                
-                TempData["success"] = "Login successfully";
+
+               // TempData["success"] = "Login successfully";
                 return RedirectToAction("Dashboard", "Admin");
             }
-            TempData["error"] = "Incorrect Email or Password";
-            return View();
+
         }
        
         public IActionResult Index()
