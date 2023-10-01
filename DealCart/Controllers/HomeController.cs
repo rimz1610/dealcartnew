@@ -11,6 +11,7 @@ using System.Text;
 using System.Net.Mail;
 
 using System.Net;
+using DealCart.BLL.ViewModels;
 
 namespace DealCart.Controllers
 {
@@ -59,14 +60,10 @@ namespace DealCart.Controllers
 
         public IActionResult Cart()
         {
-            if (_con.HttpContext.Session.GetString("Cart") == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
+          
+            
                 return View();
-            }
+            
 
 
         }
