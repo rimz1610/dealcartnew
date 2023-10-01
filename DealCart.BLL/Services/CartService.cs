@@ -71,7 +71,7 @@ namespace DealCart.BLL.Services
                 Category = p.Category.Name,
                 VAT = (p.IsDiscount == false) ? p.RealPrice + p.VAT : p.DiscountPrice + p.VAT,
                 Discount = p.DiscountPercent + "%",
-                ShippingFee=p.IsShippingFree==true? p.ShippingCharges: 0,
+                ShippingFee=p.ShippingCharges,
                 IsShippingFree=p.IsShippingFree,
                 CategoryID=p.CategoryID,
                 CreatedDate=p.CreatedDate,
