@@ -70,7 +70,12 @@
                                 <a href="/Admin/ForgotPassword">Forget Password?</a>
                             </div> *@
                             <div class="col-md-12 form-group">
-                                <span style="color:red">@ViewBag.Message</span>
+                                @if (ViewBag.Message != null)
+                                {
+                                    <span style="color:red">@ViewBag.Message</span>
+                                    
+                                }
+                               
                             </div>
                             <div class="col-md-12 form-group">
                                 

@@ -50,7 +50,7 @@
 
                             <tr>
                                 <td>
-                                    <img src="@obj.ImageURL" height="100px" width="50%" />
+                                    <img src="~/Store/UserImages/@obj.ImageURL" height="100px" width="50%" />
                                 </td>
                                 <td>
                                     @(obj.FirstName + " " + obj.LastName)
@@ -89,6 +89,16 @@
 
 
 <script>
+
+    $(document).ready(function () {
+      
+        $(".datatable").dataTable({
+            order: [[0, 'desc']],
+            "pageLength": 50
+        });
+    });
+
+
     $(document).on("click", "#btnDelete", function () {
         var id = $(this).data('userid');
         Swal.fire({

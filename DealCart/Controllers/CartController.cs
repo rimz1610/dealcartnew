@@ -19,6 +19,7 @@ using DealCart.BLL.ViewModels;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO.Pipelines;
+using static System.Collections.Specialized.BitVector32;
 
 namespace DealCart.Controllers
 {
@@ -209,10 +210,71 @@ namespace DealCart.Controllers
             _con.HttpContext.Session.Remove("Cart");
             _con.HttpContext.Session.Remove("TotalAmount");
             TempData["success"] = "Thank You for Order";
+            _con.HttpContext.Session.Clear();
             return RedirectToAction("Index","Home");
         }
 
 
+        [HttpGet]
+        public IActionResult GetContactDetail()
+        {
+            if (_con.HttpContext.Session.GetString("Order") != null)
+            {
+                 List<OrderVM> list = JsonConvert.DeserializeObject<List<OrderVM>>(_con.HttpContext.Session.GetString("Order"));
+                OrderVM o = list.FirstOrDefault();
+
+                if (o != null)
+                {
+                    ContactModel model = new ContactModel
+                    {
+                        address = o.OrderAddress,
+                        email = o.OrderEmail,
+                        name = o.OrderName,
+                        contact = o.OrderContact,
+                        emirates = o.Emirates
+                    };
+                    return Json( new { status = true, data = model });
+                }
+                return Json(new { status = false, data = new ContactModel() });
+            }
+            else
+            {
+                return Json(new { status = false, data = new ContactModel() });
+            }
+           
+           
+        }
+
+
+        [HttpPost]
+        public IActionResult SaveContactDetail(ContactModel model)
+        {
+            if (_con.HttpContext.Session.GetString("Order") != null)
+            {
+                List<OrderVM> list = JsonConvert.DeserializeObject<List<OrderVM>>(_con.HttpContext.Session.GetString("Order"));
+                OrderVM o = list.FirstOrDefault();
+                if (o != null)
+                {
+
+                    o.OrderEmail = model.email;
+                    o.OrderAddress = model.address;
+                    o.OrderName = model.name;
+                    o.OrderContact = model.contact;
+                    o.Emirates = model.emirates;
+                    list.RemoveAt(0);
+                    list.Add(o);
+                    _con.HttpContext.Session.SetString("Order", JsonConvert.SerializeObject(list));
+                    return Json(true);
+                }
+                return Json(false);
+            }
+            else
+            {
+                return Json(false);
+            }
+
+
+        }
 
 
 

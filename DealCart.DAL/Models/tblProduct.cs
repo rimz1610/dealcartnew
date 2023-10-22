@@ -25,9 +25,9 @@ namespace DealCart.DAL.Models
 
 
         [Required]
-		[Range(1, 1000)]
+        [Range(1, 1000)]
 
-		public float VAT { get; set; }
+        public float VAT { get; set; } = 0;
 
 		[Required]
         [Range(1, 100000)]

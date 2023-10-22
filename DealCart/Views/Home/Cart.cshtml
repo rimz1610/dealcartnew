@@ -5,7 +5,7 @@
     int totalQty = 0;
     float totalBill = 0;
     float subtotal = 0;
-    float totalVAT = 0;
+    // float totalVAT = 0;
     float totalshippingFee = 0;
     string amount = string.Empty;
     Layout = "_Layout";
@@ -164,7 +164,7 @@
 
                                                 <td>
                                                     <figure class="itemside">
-                                                        <div class="aside"><img src="@item.ImageUrl" class="img-sm"></div>
+                                                        <div class="aside"><img src="~/Store/ProductImages/@item.ImageUrl" class="img-sm"></div>
                                                         <figcaption class="info"><a href="#" class="title text-dark">@item.Description</a> <p class="text-muted small">@item.Name</p></figcaption>
                                                     </figure>
                                                 </td>
@@ -180,15 +180,15 @@
                                             row++;
                                             totalQty += item.Quantity;
                                             subtotal += float.Parse(item.SalePrice.ToString());
-                                            totalVAT += float.Parse(item.VAT.ToString());
+                                            //totalVAT += float.Parse(item.VAT.ToString());
                                             totalshippingFee += float.Parse(item.ShippingCharges.ToString());
 
 
                                         }
                                         //10 Fix can also be add
                                         //totalshippingFee = 10 + totalshippingFee;
-
-                                        totalBill = subtotal + totalVAT + totalshippingFee;
+                                        //  totalBill = subtotal + totalVAT + totalshippingFee;
+                                        totalBill = subtotal + totalshippingFee;
                                         _con.HttpContext.Session.SetString("TotalAmount", Newtonsoft.Json.JsonConvert.SerializeObject(totalBill));
 
                                     }
@@ -220,7 +220,10 @@
                                             <a asp-action="Index" asp-controller="Home" class="btn btn-success float-md-right me-4"> Continue shopping <i class="fa fa-chevron-right"></i></a>
 
                                             <div class="form-check form-check-custom form-check-success me-4"><input type="radio" class="form-check-input" value="Cash on Delivery" checked="checked" name="PaymentType" /> <label class="form-check-label">Cash on Delivery</label></div>
-                                            <div class="form-check form-check-custom form-check-success me-4"><input type="radio" class="form-check-input" value="Cash by PayPal" name="PaymentType" /> <label class="form-check-label">PayPal</label></div>
+                                            <div class="form-check form-check-custom form-check-success me-4">
+                                                <input type="radio" class="form-check-input d-none" disabled value="Cash by PayPal" name="PaymentType" />
+                                                <label class="form-check-label">PayPal</label>
+                                            </div>
 
                                             <button type="submit" value="Proceed to CheckOut" class="btn btn-success  float-md-left"><i class="fa fa-chevron-left"></i>Proceed to CheckOut</button>
                                         </div>
@@ -268,10 +271,11 @@
                                 <dt>Shipping Fee:</dt>
                                 <dd class="text-right">@totalshippingFee AED</dd>
                             </dl>
-                            <dl class="dlist-align">
-                                <dt>VAT:</dt>
-                                <dd class="text-right">@totalVAT AED</dd>
-                            </dl> <hr class="w-100">
+                            @*  <dl class="dlist-align">
+                            <dt>VAT:</dt>
+                            <dd class="text-right">@totalVAT AED</dd>
+                            </dl>  *@
+                            <hr class="w-100">
                             <dl class="dlist-align">
                                 <dt>Grand Total:</dt>
                                 <dd class="text-right h5"><strong>@totalBill AED</strong></dd>
@@ -280,11 +284,16 @@
 
                             @if (@_con.HttpContext.Session.GetString("Order") != null)
                             {
+                               @*  <button type="button" class="edit-contact-button btn btn-sm btn-warning">Contact Details <i class="fa fa-edit"></i></button>
+ *@
                                 foreach (var order in Newtonsoft.Json.JsonConvert.DeserializeObject<List<OrderVM>>(@_con.HttpContext.Session.GetString("Order")))
                                 {
-
                                     <dl class="dlist-align">
-                                        <dt>Name:</dt>
+                                        <dt>
+
+                                            Name:  <span class="edit-contact-button text-warning" style="margin-left:10px"><i class="fa fa-edit" style="color:green;"></i></span>
+                                        </dt>
+                                      
                                         <dd class="text-right">@order.OrderName</dd>
                                     </dl>
                                     <dl class="dlist-align">
@@ -315,8 +324,217 @@
     </section>
 
 </div>
-<script type="text/javascript">
+
+
+<div class="modal fade" id="contact-edit-model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Contact Details</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+
+                    <span>
+                        <label for="OrderName">Full Name<span class="text-danger">*</span></label>
+                        <input type="text" name="OrderName" id="OrderName" onchange="changeName();" placeholder="Enter Name" class="form-control">
+                        <span class="text-danger d-none reqOrderName">Required</span>
+                    </span>
+                </div>
+                <div class="form-group mb-3">
+                    <span>
+                        <label for="OrderEmail">Email<span class="text-danger">*</span></label>
+                        <input type="email" name="OrderEmail" id="OrderEmail" onchange="changeEmail();"  placeholder="Enter Email" class="form-control">
+                        <span class="text-danger d-none reqOrderEmail">Required</span>
+                    </span>
+                </div>
+                <div class="form-group mb-3 fake-input">
+                    <span>
+                        <label for="OrderContact">Mobile<span class="text-danger">*</span></label>
+                        <img src="https://jetronics.ae/uploads/lib/AE.png" width="20"><span class="code">+971&nbsp;</span>
+                        <input type="number" name="OrderContact" id="OrderContact"  onchange="changeContact();" maxlength="13" placeholder="Mobile" class="form-control">
+                        <span class="text-danger d-none reqOrderContact">Required</span>
+                    </span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Emirates"> Emirates<span class="text-danger">*</span></label>
+                    <select class="form-control" id="Emirates" name="Emirates" onchange="changeEmirates();" style="width: 100%;">
+                        <option disabled selected>--Select Emirates--</option>
+                        <option value="Dubai">DUBAI</option>
+                        <option value="Abu  Dhabi ">ABU DHABI</option>
+                        <option value="Sharjaah">SHARJAH</option>
+                        <option value="Ajman">AJMAN</option>
+                        <option value="Ras AL Khaimah">RAS AL KHAIMAH</option>
+                        <option value="Fujairah ">FUJAIRAH</option>
+                        <option value="Umm Al Quwain">UMM AL QUWAIN</option>
+                        <option value="Al ain">Al ain</option>
+                    </select>
+                    <span class="text-danger d-none reqOrderEmirates">Required</span>
+                </div>
+                <div class="form-group mb-3">
+                    <span>
+                        <label for="OrderAddress">
+                            Delivery Address<span class="text-danger">*</span>
+                        </label>
+                        <textarea id="OrderAddress" name="OrderAddress" onchange="changeAddress();" placeholder="Delivery Address" class="form-control" rows="5"></textarea>
+                        <span class="text-danger d-none reqOrderAddress">Required</span>
+                    </span>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save-contact-button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+   
+
+
+    function changeName(){
+        var orderName = $("#OrderName").val();
+        if (orderName == '' || orderName == undefined) {
+          
+            $('.reqOrderName').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderName').addClass("d-none");
+        }
+    }
+    function changeEmail() {
+        var orderEmail = $("#OrderEmail").val();
+        var regex = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (orderEmail == '') {
+
+            $('.reqOrderEmail').text('Required');
+            $('.reqOrderEmail').removeClass('d-none');
+         
+        }
+        // else if (regex.test(email) == false) {
+
+        //     isValid = false;
+
+        //     $('.reqOrderEmail').text('Invalid email');
+        //     $('.reqOrderEmail').removeClass('d-none');
+        // }
+        else {
+            $('.reqOrderEmail').addClass('d-none');
+        }
+    }
+
+    function changeContact() {
+        var orderContact = $("#OrderContact").val();
+        if (orderContact == '' || orderContact == undefined) {
+         
+            $('.reqOrderContact').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderContact').addClass("d-none");
+        }
+    }
+
+    function changeAddress() {
+        var orderAddress = $("#OrderAddress").val();
+        if (orderAddress == '' || orderAddress == undefined) {
+    
+            $('.reqOrderAddress').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderAddress').addClass("d-none");
+        }
+    }
+
+    function changeEmirates() {
+        var orderEmirates = $("select#Emirates").children("option:selected").val();
+        if (orderEmirates == '--Select Emirates--' || orderEmirates == '' || orderEmirates == undefined) {
+
+           
+            $('reqOrderEmirates').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderEmirates').addClass("d-none");
+        }
+    }
+    function ValidateOrderContactForm() {
+
+        var isValid = true;
+
+        var orderName = $("#OrderName").val();
+        var orderEmail = $("#OrderEmail").val();
+        var orderContact = $("#OrderContact").val();
+        var orderAddress = $("#OrderAddress").val();
+        var orderEmirates = $("select#Emirates").children("option:selected").val();
+        console.log(orderEmirates);
+        
+        if (orderName == '' || orderName == undefined) {
+            isValid = false;
+            $('.reqOrderName').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderName').addClass("d-none");
+        }
+        var regex = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (orderEmail == '') {
+
+            $('.reqOrderEmail').text('Required');
+            $('.reqOrderEmail').removeClass('d-none');
+            isValid = false;
+        }
+        // else if (regex.test(email) == false) {
+
+        //     isValid = false;
+
+        //     $('.reqOrderEmail').text('Invalid email');
+        //     $('.reqOrderEmail').removeClass('d-none');
+        // }
+        else {
+            $('.reqOrderEmail').addClass('d-none');
+        }
+        if (orderContact == '' || orderContact == undefined) {
+            isValid = false;
+            $('.reqOrderContact').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderContact').addClass("d-none");
+        }
+        if (orderAddress == '' || orderAddress == undefined) {
+            isValid = false;
+            $('.reqOrderAddress').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderAddress').addClass("d-none");
+        }
+        if (orderEmirates == '--Select Emirates--' || orderEmirates == '' || orderEmirates == undefined) {
+         
+            isValid = false;
+            $('reqOrderEmirates').removeClass("d-none");
+        }
+        else {
+            $('.reqOrderEmirates').addClass("d-none");
+        }
+
+        return isValid;
+
+
+    }
+
+
     window.onload = function () { window.scrollBy(0, 180); }
+
+
+
+
+
+
+
 
     $(document).ready(function () {
         $('.checkform').submit(function (event) {
@@ -354,6 +572,80 @@
 
 
         });
+
+
+        $(".edit-contact-button").click(function (e) {
+            e.preventDefault();
+            console.log("edit button clicked")
+            $.ajax({
+                url: '/Cart/GetContactDetail',
+                type: 'GET',
+
+                success: function (result) {
+                    console.log(result);
+                    if (result.status == true) {
+                        $("#OrderName").val(result.data.name);
+                        $("#OrderEmail").val(result.data.email);
+                        $("#OrderContact").val(result.data.contact);
+                        $("#OrderAddress").val(result.data.address);
+                        $("#Emirates").val(result.data.emirates).change();
+                        $('#contact-edit-model').modal('show');
+                    }
+                    else {
+
+                        $('#contact-edit-model').modal('hide');
+                    }
+                },
+                error: function (e, xhr, settings) {
+                },
+                complete: function () {
+
+                }
+            });
+
+
+
+        });
+
+
+        $("#save-contact-button").click(function (e) {
+            e.preventDefault();
+            $('#save-contact-button').prop('disabled', true);
+            var Validation = ValidateOrderContactForm();
+            if (!Validation) {
+                $('#save-contact-button').prop('disabled', false);
+                return false;
+            }
+
+            else {
+                var data = {};
+                data.name = $("#OrderName").val();
+                data.email = $("#OrderEmail").val();
+                data.contact = $("#OrderContact").val();
+                data.address = $("#OrderAddress").val();
+                data.emirates = $("select#Emirates").children("option:selected").val();
+
+                $.ajax({
+                    url: '/Cart/SaveContactDetail',
+                    type: 'POST',
+                    data: { model: data },
+
+                    success: function (result) {
+                        $('#save-contact-button').prop('disabled', false);
+                        window.location.href = '/Home/Cart';
+
+                    },
+                    error: function (e, xhr, settings) {
+                    },
+                    complete: function () {
+
+                    }
+                });
+
+            }
+
+        });
+    
     });
 
 </script>

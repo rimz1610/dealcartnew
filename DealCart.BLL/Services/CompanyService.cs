@@ -23,12 +23,12 @@ namespace DealCart.BLL.Services
             if (file != null)
             {
                 string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(wwwRootPath, @"Images");
+                var uploads = Path.Combine(wwwRootPath, @"Store\CompanyLogos");
                 var extension = Path.GetExtension(file.FileName);
 
                 if (obj.Logo != null)
                 {
-                    var oldImagePath = Path.Combine(wwwRootPath, obj.Logo.TrimStart('\\'));
+                    var oldImagePath = Path.Combine(wwwRootPath, @"Store\CompanyLogos", obj.Logo);
                     if (System.IO.File.Exists(oldImagePath))
                     {
                         System.IO.File.Delete(oldImagePath);
@@ -39,7 +39,7 @@ namespace DealCart.BLL.Services
                 {
                     file.CopyTo(fileStreams);
                 }
-                obj.Logo = @"\Images\" + fileName + extension;
+                obj.Logo =  fileName + extension;
 
             }
             if (obj.ID == 0)
@@ -60,7 +60,7 @@ namespace DealCart.BLL.Services
 			{
                 try
                 {
-                    var oldImagePath = Path.Combine(wwwRootPath, company.Logo.TrimStart('\\'));
+                    var oldImagePath = Path.Combine(wwwRootPath, @"Store\CompanyLogos", company.Logo);
                     if (System.IO.File.Exists(oldImagePath))
                     {
                         System.IO.File.Delete(oldImagePath);

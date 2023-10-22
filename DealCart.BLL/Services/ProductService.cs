@@ -40,7 +40,7 @@ namespace DealCart.BLL.Services
                     //var oldImagePath = Path.Combine(wwwRootPath, product.ImageUrl.TrimStart('\\'));
                     foreach(var item in product.tblProductImages)
                     {
-                        var oldImagePath = Path.Combine(wwwRootPath, item.ImagePath.TrimStart('\\'));
+                        var oldImagePath = Path.Combine(wwwRootPath, @"\Store\ProductImages", item.ImagePath);
                         if (System.IO.File.Exists(oldImagePath))
                         {
                             System.IO.File.Delete(oldImagePath);
@@ -80,7 +80,7 @@ namespace DealCart.BLL.Services
             {
                 try
                 {
-                        var oldImagePath = Path.Combine(wwwRootPath, productImage.ImagePath.TrimStart('\\'));
+                        var oldImagePath = Path.Combine(wwwRootPath, @"\Store\ProductImages", productImage.ImagePath);
                         if (System.IO.File.Exists(oldImagePath))
                         {
                             System.IO.File.Delete(oldImagePath);
@@ -138,6 +138,7 @@ namespace DealCart.BLL.Services
                     DiscountPercent= product.DiscountPercent,
                     Status=product.Status,
                     DiscountPrice= product.DiscountPrice,
+                    
                     Inventory=product.Inventory,
                     ShippingFee=product.ShippingCharges,
                     IsShippingFree= product.IsShippingFree,
@@ -174,34 +175,42 @@ namespace DealCart.BLL.Services
         }
         
         public string SaveProductImage (string ImageUrl , string wwwRootPath, IFormFile? file)
-    {
-        if (file != null)
+
         {
-
-
-            string fileName = Guid.NewGuid().ToString();
-            var uploads = Path.Combine(wwwRootPath, @"Images");
-            var extension = Path.GetExtension(file.FileName);
-
-            if (ImageUrl != null)
+            try
             {
-                var oldImagePath = Path.Combine(wwwRootPath, ImageUrl.TrimStart('\\'));
-                if (System.IO.File.Exists(oldImagePath))
+
+                if (file != null)
                 {
-                    System.IO.File.Delete(oldImagePath);
+
+
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"Store\ProductImages");
+                    var extension = Path.GetExtension(file.FileName);
+
+                    if (ImageUrl != null)
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, @"Store\ProductImages", ImageUrl);
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+                    ImageUrl = fileName + extension;
+
+
                 }
+                return ImageUrl;
             }
-
-            using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+            catch(Exception ex)
             {
-                file.CopyTo(fileStreams);
+                return string.Empty;
             }
-            ImageUrl = @"\Images\" + fileName + extension;
-            
-
-        }
-             return ImageUrl;
-        
         }
 
 

@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="mb-5">
                                     <a asp-controller="Cart" asp-action="Order" asp-route-id="@items.ID">
-                                        <img src="@items.Image" class="img-fluid">
+                                        <img src="~/Store/ProductImages/@items.Image" class="img-fluid">
                                     </a>
                                 </div>
                                 <div>
@@ -113,7 +113,7 @@
                                     <div class="">
                                         @if (items.IsShippingFree == false)
                                         {
-                                            <label class="badge badge-success badge-rounded">@items.ShippingCharges Delievery Charges</label>
+                                           @*  <label class="badge badge-success badge-rounded">@items.ShippingCharges Delievery Charges</label> *@
                                         }
                                         else
                                         {
@@ -128,10 +128,10 @@
                                     <div class="">
                                         <span class="fw-bold mb-2 fs-4">@items.SalePrice AED</span>
                                     </div>
-                                    <div>
+                                  @*   <div>
                                         <span class="text-dark">@items.VAT AED - VAT included</span>
 
-                                    </div>
+                                    </div> *@
                                     <div>
                                         @if (items.Inventory == 0 || items.Status.Trim() == "OutOfStock")
                                         {

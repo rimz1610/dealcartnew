@@ -46,21 +46,22 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label  class="control-label">Category</label>
+                            <label class="control-label">Category</label>
                             <select asp-for="CategoryID" asp-items="@categoryList" class="form-control">
                                 <option disabled selected>--Select Category--</option>
                             </select>
                             <span asp-validation-for="CategoryID" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <input asp-for="VAT" value="0" type="hidden" class="form-control" />
+                 @*    <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">VAT</label>
-                            <input asp-for="VAT" class="form-control" />
+                            <input asp-for="VAT" value="0" type="hidden" class="form-control" />
                             <span asp-validation-for="VAT" class="text-danger"></span>
                         </div>
-                    </div>
-                   
+                    </div> *@
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" asp-for="Status"></label>
@@ -104,37 +105,38 @@
                             <input type="file" id="uploadBox" name="file" multiple="multiple" class="form-control" />
                         </div>
                     </div>
-                     
 
-                        <ul class="attachment" style="display: flex; list-style: none; padding: 0;">
-                    @if(Model.ID > 0 && Model.ProductImages != null && Model.ProductImages.Count>0){
-                        foreach(var item in Model.ProductImages)
+
+                    <ul class="attachment" style="display: flex; list-style: none; padding: 0;">
+                        @if (Model.ID > 0 && Model.ProductImages != null && Model.ProductImages.Count > 0)
                         {
-                            <li class="image-container" style="margin-bottom: 2px; display: flex; align-items: center;">
+                            foreach (var item in Model.ProductImages)
+                            {
+                                <li class="image-container" style="margin-bottom: 2px; display: flex; align-items: center;">
                                     <div class="col-md-12">
-                                <div class="form-group" style="display: flex;">
-                        <div class="col-md-4">
-                            <img class="img-responsive" id="@item.ImageID" style="width: 100px; height: 100px;" src="@item.ImageUrl" alt="1.jpg">
-                        </div>
-                      
-                        <div class="col-md-4">
-                          
-                            <input type="number" name="SortOrder[@item.ImageID]" class="sort-order form-control" value="@item.SortOrder" />
-                        </div>
-                     
-                        <div class="col-md-4">
-                            <a href="javascript:void(0);" data-id="@item.ImageID" class="btn btn-danger deleteItem">Delete</a>
-                        </div>
-                    </div>
+                                        <div class="form-group" style="display: flex;">
+                                            <div class="col-md-4">
+                                                <img class="img-responsive" id="@item.ImageID" style="width: 100px; height: 100px;" src="~/Store/ProductImages/@item.ImageUrl" alt="1.jpg">
+                                            </div>
+
+                                            <div class="col-md-4">
+
+                                                <input type="number" name="SortOrder[@item.ImageID]" class="sort-order form-control" value="@item.SortOrder" />
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <a href="javascript:void(0);" data-id="@item.ImageID" class="btn btn-danger deleteItem">Delete</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
-                                    
-                                       
+
+
+                            }
+
                         }
-                      
-                    }
                     </ul>
-                    
+
 
                     <div class="col-md-6">
                         <div class="form-group">
@@ -166,7 +168,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Discounted Price</label>
-                            <input name="DiscountedPercent" id="DiscountedPrice" value="0" disabled class="form-control" />
+                            <input name="DiscountedPercent" id="DiscountedPrice"  disabled class="form-control" />
 
                         </div>
                     </div>
@@ -242,8 +244,8 @@
 
 
 
-              
-                
+
+
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
                     <textarea asp-for="Description" rows="3" placeholder="Enter Text Here" class="form-control"></textarea>
@@ -282,26 +284,26 @@
     </script>
     <script>
         var quantityrow = `<div class="row   newproduct-quantity-item  product-quantity-item">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label>No of Quanity</label>
-                                                                     <input name="Quantity" id="ProQuantity"  class="form-control"  />
-                                                                     <span class="QuantityError d-none text-danger">Required</span>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>No of Quanity</label>
+                                                                             <input name="Quantity" id="ProQuantity"  class="form-control"  />
+                                                                             <span class="QuantityError d-none text-danger">Required</span>
 
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-5">
-                                                                <div class="form-group">
-                                                                 <label>Price</label>
-                                                                   <input name="Price" id="Price" class="form-control"  />
-                                                                    <span class="QuantityPriceError d-none text-danger">Required</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                         <label>Price</label>
+                                                                           <input name="Price" id="Price" class="form-control"  />
+                                                                            <span class="QuantityPriceError d-none text-danger">Required</span>
 
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-1 text-right align-self-center">
-                                                                <a data-repeater-delete class="btn btn-light-danger btn-hover-danger" id="deletequantity" onclick=""><i class="la la-trash-o font17"></i>Delete</a>
-                                                            </div>
-                                                        </div>`;
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1 text-right align-self-center">
+                                                                        <a data-repeater-delete class="btn btn-light-danger btn-hover-danger" id="deletequantity" onclick=""><i class="la la-trash-o font17"></i>Delete</a>
+                                                                    </div>
+                                                                </div>`;
 
 
 
@@ -377,8 +379,8 @@
                 var fileInput = document.getElementById('uploadBox');
                 var uploadedFilesCount = fileInput.files.length;
                 var imageList = document.querySelectorAll('.image-container');
-                var id=@Model.ID;
-                if (uploadedFilesCount === 0 && id==0) {
+                var id = @Model.ID;
+                if (uploadedFilesCount === 0 && id == 0) {
                     event.preventDefault(); // Prevent form submission
                     Swal.fire({
                         icon: 'error',
@@ -387,7 +389,7 @@
                     });
                     return;
                 }
-                else if (id > 0 && uploadedFilesCount === 0 && imageList.length === 0){
+                else if (id > 0 && uploadedFilesCount === 0 && imageList.length === 0) {
                     event.preventDefault(); // Prevent form submission
                     Swal.fire({
                         icon: 'error',
@@ -499,7 +501,7 @@
                 })
 
 
-               
+
             });
         });
 

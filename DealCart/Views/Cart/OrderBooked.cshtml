@@ -5,7 +5,7 @@
     int totalQty = 0;
     float totalBill = 0;
     float subtotal = 0;
-    float totalVAT = 0;
+    //float totalVAT = 0;
     string amount = string.Empty;
     Layout = "_Layout";
 
@@ -142,7 +142,7 @@
                                         <tr>
                                             <td>
                                                 <figure class="itemside">
-                                                    <div class="aside"><img src="@item.ImageUrl" class="img-sm"></div>
+                                                    <div class="aside"><img src="~/Store/ProductImages/@item.ImageUrl" class="img-sm"></div>
                                                     <figcaption class="info"><a href="#" class="title text-dark">@item.Description</a> <p class="text-muted small">@item.Name</p></figcaption>
                                                 </figure>
                                             </td>
@@ -158,8 +158,9 @@
                                         row++;
                                         totalQty += item.Quantity;
                                         subtotal += float.Parse(item.SalePrice.ToString());
-                                        totalVAT += float.Parse(item.VAT.ToString());
-                                        totalBill += float.Parse((subtotal.ToString() + totalVAT.ToString())); ;
+                                       // totalVAT += float.Parse(item.VAT.ToString());
+                                       // totalBill += float.Parse((subtotal.ToString() + totalVAT.ToString())); 
+                                        totalBill += float.Parse((subtotal.ToString())); 
 
 
                                     }
@@ -170,7 +171,7 @@
                         </table>
                         <div class="card-body border-top">
 
-                            <a asp-action="Index" asp-controller="Home" class="btn btn-success float-md-right"> Close Order</a>
+                            <a asp-action="CloseOrder" asp-controller="Cart" class="btn btn-success float-md-right"> Close Order</a>
 
 
                         </div>
@@ -188,10 +189,11 @@
                                 <dt>Shipping Fee:</dt>
                                 <dd class="text-right">0 AED</dd>
                             </dl>
-                            <dl class="dlist-align">
+                           @*  <dl class="dlist-align">
                                 <dt>VAT:</dt>
                                 <dd class="text-right">@totalVAT AED</dd>
-                            </dl> <hr>
+                            </dl> *@
+                            <hr>
                             <dl class="dlist-align">
                                 <dt>Grand Total:</dt>
                                 <dd class="text-right h5"><strong>@totalBill AED</strong></dd>
