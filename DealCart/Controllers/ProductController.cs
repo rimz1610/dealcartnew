@@ -3,6 +3,7 @@ using DealCart.BLL.Services;
 using DealCart.BLL.ViewModels;
 using DealCart.DAL.Models;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -153,7 +154,23 @@ namespace DealCart.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult UploadCKEditor(IFormFile upload)
+        {
+            string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + upload.FileName;
+            string path = Path.Combine(Directory.GetCurrentDirectory(),_hostEnvironment.WebRootPath, "uploadCkFiles", fileName);
+            FileStream stream = new FileStream(path, FileMode.Create);
+            _ = upload.CopyToAsync(stream);
 
+            return View("FileBrowse");
+        }
+
+        public IActionResult FileBrowse(IFormFile upload)
+        {
+            DirectoryInfo dir = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(),_hostEnvironment.WebRootPath, "uploadCkFiles"));
+            ViewBag.fileinfo = dir.GetFiles();
+            return View("FileBrowse");
+        }
         public IActionResult Delete(int Id)
         {
             string wwwRootPath = _hostEnvironment.WebRootPath;

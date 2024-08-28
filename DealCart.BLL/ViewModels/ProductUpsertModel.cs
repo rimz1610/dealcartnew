@@ -36,6 +36,7 @@ namespace DealCart.BLL.ViewModels
          public bool IsDiscount { get; set; } = true;
         public int DiscountPercent { get; set; } = 0;
         
+        public string? EditorText { get; set; }
        
 
         [Range(1, 100, ErrorMessage = "Please enter a value between 1 and 100")]

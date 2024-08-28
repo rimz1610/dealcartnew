@@ -27,7 +27,7 @@
                 <input type="hidden" name="JsonQuantityData" asp-for="JsonQuantityData" value="" />
                 <input type="hidden" name="SortOrders" asp-for="SortOrders" value="" />
                 <input type="hidden" id="QuantityListCount" value="@Model.QuantityDataCount" />
-
+                <input type="hidden" id="EditorText" asp-asp-for="EditorText" value="" />
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -248,7 +248,7 @@
 
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <textarea asp-for="Description" rows="3" placeholder="Enter Text Here" class="form-control"></textarea>
+                    <textarea asp-for="Description" rows="20" cols="165" id="editor" placeholder="Enter Text Here" class="form-control"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
 
 
@@ -282,7 +282,14 @@
             selector: "textarea"
         });
     </script> *@
+    <script src="~/ckeditor/ckeditor.js"></script>
     <script>
+        CKEDITOR.replace('editor', {
+            height: 400,
+            filebrowserUploadUrl: "/Product/UploadCKEditor",
+            filebrowserImageBrowseUrl: "/Product/fileBrowse",
+        });
+        CKEDITOR.addCss(".cke_editable{background - color: #dadcda }");
         var quantityrow = `<div class="row   newproduct-quantity-item  product-quantity-item">
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
@@ -380,6 +387,8 @@
                 var uploadedFilesCount = fileInput.files.length;
                 var imageList = document.querySelectorAll('.image-container');
                 var id = @Model.ID;
+                var Editor = CKEDITOR.instances.editor.getData();
+                $("#EditorText").val(Editor);
                 if (uploadedFilesCount === 0 && id == 0) {
                     event.preventDefault(); // Prevent form submission
                     Swal.fire({
