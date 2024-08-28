@@ -17,13 +17,15 @@ namespace DealCart.BLL.ViewModels
      
         public int ID { get; set; }
 
-        [Required]
-        [StringLength(150, ErrorMessage = "Input excedd maximum length")]
+        [Required(ErrorMessage ="Required")]
+        [StringLength(100,MinimumLength =2, ErrorMessage = "The name must be between 2 and 100 characters")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Required")]
+        [StringLength(150, MinimumLength = 2, ErrorMessage = "The short description must be between 2 and 150 characters")]
         public string ShortDescription { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public float VAT { get; set; }
 
@@ -47,6 +49,7 @@ namespace DealCart.BLL.ViewModels
         public string SortOrders { get; set; }
         public int Inventory { get; set; }
 
+        [Required(ErrorMessage = "Required")]
         public string Status { get; set; }
 
         public bool IsShippingFree { get; set; } = false;
